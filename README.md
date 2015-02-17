@@ -8,7 +8,7 @@
 
 A simple usage example:
 
-    import 'package:dogma_data/dogma_data.dart';
+    import 'package:dogma_data/data.dart';
 
     main() {
       

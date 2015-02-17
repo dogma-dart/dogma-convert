@@ -1,6 +1,9 @@
 name: dogma_data
 version: 0.0.1
 description: A library useful for applications or for sharing on pub.dartlang.org.
+dependencies:
+  analyzer: any
+  code_transformers: any
 dev_dependencies:
   coverage: any
   unittest: any

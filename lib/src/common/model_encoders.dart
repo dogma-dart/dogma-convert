@@ -9,6 +9,5 @@ part of dogma.data.common;
 ///
 /// An instance of [ModelEncoders] cannot be created directly. Instead use the
 /// [getEncoders] function to retrieve.
-abstract class ModelEncoders {
-  ModelEncoder getEncoder(Symbol symbol);
-}
+@proxy
+class ModelEncoders {}

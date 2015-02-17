@@ -10,6 +10,4 @@ part of dogma.data.common;
 /// An instance of [ModelDecoders] cannot be created directly. Instead use the
 /// [getDecoders] function to retrieve.
 @proxy
-abstract class ModelDecoders {
-  ModelDecoder getDecoder(Symbol symbol);
-}
+class ModelDecoders {}

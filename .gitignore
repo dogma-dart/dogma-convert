@@ -2,6 +2,7 @@
 build/
 packages/
 .buildlog
+.pub
 
 # Or the files created by dart2js.
 *.dart.js
@@ -12,3 +13,6 @@ packages/
 
 # Include when developing application packages.
 pubspec.lock
+
+# Ignore generated code in tests
+test/generated

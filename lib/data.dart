@@ -1,9 +1,8 @@
-// Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
-// is governed by a BSD-style license that can be found in the LICENSE file.
+// Copyright (c) 2015, the Dogma Project Authors.
+// Please see the AUTHORS file for details. All rights reserved.
+// Use of this source code is governed by a zlib license that can be found in
+// the LICENSE file.
 
-/// The dogma_data library.
-///
-/// This is an awesome library. More dartdocs go here.
 library dogma.data;
 
 export 'package:dogma_data/common.dart' show ModelDecoder,

@@ -5,21 +5,19 @@
 
 library dogma.data.test.simple_models;
 
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
 import 'package:dogma_data/data.dart';
 import 'package:unittest/unittest.dart';
+
+import 'models/simple_test_model.dart';
+import 'models/simple_test_model_annotated.dart';
 
 //---------------------------------------------------------------------
 // Simple test model
 //---------------------------------------------------------------------
-
-class SimpleTestModel {
-  int testInt;
-  double testDouble;
-  num testNumInt;
-  num testNumDouble;
-  String testString;
-  List<int> testIntList;
-}
 
 Map serializedSimpleTestModel = {
   'testInt': 42,
@@ -43,21 +41,6 @@ void verifySimpleTestModelSerialization(SimpleTestModel model, Map serialized) {
 // Annotated simple test model
 //---------------------------------------------------------------------
 
-class SimpleTestModelAnnotated {
-  @SerializationProperty('test_int')
-  int testInt;
-  @SerializationProperty('test_double')
-  double testDouble;
-  @SerializationProperty('test_num_int')
-  num testNumInt;
-  @SerializationProperty('test_num_double')
-  num testNumDouble;
-  @SerializationProperty('test_string')
-  String testString;
-  @SerializationProperty('test_int_list')
-  List<int> testIntList;
-}
-
 Map serializedSimpleTestModelAnnotated = {
   'test_int': 42,
   'test_double': 3.14159265359,
@@ -80,9 +63,12 @@ void verifySimpleTestModelAnnotatedSerialization(SimpleTestModelAnnotated model,
 // Tests
 //---------------------------------------------------------------------
 
+const _simpleLibrary = #dogma.data.test.simple_test_model;
+const _simpleAnnotatedLibrary = #dogma.data.test.simple_test_model_annotated;
+
 void testDecode() {
   var serialized = serializedSimpleTestModel;
-  var decoder = getDecoders().getDecoder(#SimpleTestModel);
+  var decoder = getDecoders(_simpleLibrary).simpleTestModel;
   var decoded = decoder.convert(serialized);
 
   verifySimpleTestModelSerialization(decoded, serialized);
@@ -90,7 +76,7 @@ void testDecode() {
 
 void testDecodeAnnotated() {
   var serialized = serializedSimpleTestModelAnnotated;
-  var decoder = getDecoders().getDecoder(#SimpleTestModelAnnotated);
+  var decoder = getDecoders(_simpleAnnotatedLibrary).simpleTestModelAnnotated;
   var decoded = decoder.convert(serialized);
 
   verifySimpleTestModelAnnotatedSerialization(decoded, serialized);
@@ -108,7 +94,7 @@ void testEncode() {
       ..testString    = serialized['testString']
       ..testIntList   = serialized['testIntList'];
 
-  var encoder = getEncoders().getEncoder(#SimpleTestModel);
+  var encoder = getEncoders(_simpleLibrary).simpleTestModel;
   var encoded = encoder.convert(model);
 
   verifySimpleTestModelSerialization(model, encoded);
@@ -126,7 +112,7 @@ void testEncodeAnnotated() {
       ..testString    = serialized['test_string']
       ..testIntList   = serialized['test_int_list'];
 
-  var encoder = getEncoders().getEncoder(#SimpleTestModelAnnotated);
+  var encoder = getEncoders(_simpleAnnotatedLibrary).simpleTestModelAnnotated;
   var encoded = encoder.convert(model);
 
   verifySimpleTestModelAnnotatedSerialization(model, encoded);
