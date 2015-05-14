@@ -20,6 +20,7 @@ part 'src/common/model_decoders.dart';
 part 'src/common/model_encoder.dart';
 part 'src/common/model_encoders.dart';
 part 'src/common/serialization_property.dart';
+part 'src/common/serialization_value.dart';
 
 /// Creates an instance of [ModelDecoders] given the [library] symbol.
 typedef ModelDecoders ModelDecodersFactory(Symbol library);

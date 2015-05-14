@@ -25,6 +25,21 @@ ClassMirror _getClassMirror(Symbol symbol, List<LibraryMirror> searchLibraries) 
 }
 
 //---------------------------------------------------------------------
+// VariableMirror helpers
+//---------------------------------------------------------------------
+
+bool _isBuiltinType(TypeMirror mirror) {
+  Symbol simpleName = mirror.simpleName;
+
+  return
+    (simpleName == #bool)   ||
+    (simpleName == #int)    ||
+    (simpleName == #double) ||
+    (simpleName == #num)    ||
+    (simpleName == #String);
+}
+
+//---------------------------------------------------------------------
 // LibraryMirror helpers
 //---------------------------------------------------------------------
 

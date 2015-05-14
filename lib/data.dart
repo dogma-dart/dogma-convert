@@ -5,7 +5,12 @@
 
 library dogma.data;
 
-export 'package:dogma_data/common.dart' show ModelDecoder,
+export 'package:dogma_data/common.dart' show ModelEncoder,
+                                             ModelDecoder,
                                              SerializationProperty,
                                              getEncoders,
                                              getDecoders;
+
+class SerializableLibrary {
+  const SerializableLibrary();
+}

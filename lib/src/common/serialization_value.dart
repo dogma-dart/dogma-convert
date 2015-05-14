@@ -3,15 +3,11 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma.data.test.test_mirrors;
+part of dogma.data.common;
 
-import 'package:dogma_data/mirrors.dart';
+class SerializationValue {
+  /// The value to check for.
+  final dynamic value;
 
-import 'test_suite.dart' as suite;
-
-void main() {
-  useMirrors();
-
-  // Run the tests
-  suite.runTests();
+  const SerializationValue(this.value);
 }

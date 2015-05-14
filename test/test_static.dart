@@ -5,13 +5,12 @@
 
 library dogma.data.test.test_static;
 
-import 'package:unittest/unittest.dart';
 import 'package:dogma_data/static.dart';
 
 import 'generated/simple_test_model_static.dart' as simple_test_model_static;
 import 'generated/simple_test_model_annotated_static.dart' as simple_test_model_annotated_static;
 
-import 'simple_models.dart' as simple_models;
+import 'test_suite.dart' as suite;
 
 void main() {
   // Initialize the static library
@@ -21,5 +20,6 @@ void main() {
   simple_test_model_static.register();
   simple_test_model_annotated_static.register();
 
-  group('dogma.data.static', simple_models.main);
+  // Run the tests
+  suite.runTests();
 }

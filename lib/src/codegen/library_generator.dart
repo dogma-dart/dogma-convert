@@ -13,6 +13,7 @@ library dogma.data.codegen.library_generator;
 import 'package:analyzer/src/generated/element.dart';
 
 import 'codegen_helpers.dart';
+import 'model_converter_generator.dart';
 import 'model_decoder_generator.dart';
 import 'model_encoder_generator.dart';
 
@@ -62,7 +63,7 @@ class LibraryGenerator {
 
     // Write out each ModelDecoder
     for (var generator in decoderGenerators) {
-      generator.writeDecoder(buffer);
+      generator.write(buffer);
     }
 
     // Write out the ModelDecoders
@@ -70,15 +71,16 @@ class LibraryGenerator {
 
     for (var generator in decoderGenerators) {
       var name = generator.element.name;
+      var parameters = _toConstructorParameters(generator);
 
-      buffer.writeln('  final ModelDecoder<$name> ${_toVariableName(name)} = new ${name}Decoder();');
+      buffer.writeln('  final ModelDecoder<$name> ${toVariableName(name)} = new ${name}Decoder($parameters);');
     }
 
     buffer.writeln('}\n');
 
     // Write out each ModelEncoder
     for (var generator in encoderGenerators) {
-      generator.writeEncoder(buffer);
+      generator.write(buffer);
     }
 
     // Write out the ModelEncoders
@@ -87,7 +89,7 @@ class LibraryGenerator {
     for (var generator in encoderGenerators) {
       var name = generator.element.name;
 
-      buffer.writeln('  final ModelEncoder<$name> ${_toVariableName(name)} = new ${name}Encoder();');
+      buffer.writeln('  final ModelEncoder<$name> ${toVariableName(name)} = new ${name}Encoder();');
     }
 
     buffer.writeln('}\n');
@@ -101,10 +103,27 @@ class LibraryGenerator {
     buffer.writeln('}\n');
   }
 
-  static _toVariableName(String value) {
+  static String toVariableName(String value) {
     var end = value.substring(1);
     var start = value.substring(0, 1).toLowerCase();
 
     return start + end;
+  }
+
+  static String _toConstructorParameters(ModelConverterGenerator generator) {
+    var parameters = '';
+    var first = true;
+
+    for (var dependency in generator.dependencies) {
+      if (!first) {
+        parameters += ', ';
+      } else {
+        first = false;
+      }
+
+      parameters += toVariableName(dependency.displayName);
+    }
+
+    return parameters;
   }
 }

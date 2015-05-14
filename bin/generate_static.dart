@@ -35,6 +35,20 @@ class SimpleTestModel {
 library dogma.data.test.simple_test_model_annotated;
 import 'package:dogma_data/common.dart';
 
+class Foo {
+  int testing;
+
+  static Foo testingThisForRealz(dynamic value);
+}
+
+Foo testingThis(dynamic value) {
+  var instance = new Foo();
+
+  instance.testing = 42;
+
+  return instance;
+}
+
 class SimpleTestModelAnnotated {
   @SerializationProperty('test_int')
   int testInt;
@@ -48,6 +62,44 @@ class SimpleTestModelAnnotated {
   String testString;
   @SerializationProperty('test_int_list', encode: true)
   List<int> testIntList;
+  @SerializationFieldDecoder(#testingThis)
+  Foo foo;
+}
+''',
+  '/customer_database.dart': '''
+library dogma.data.test.models.customer_database;
+
+import 'package:dogma_data/common.dart';
+
+class Address {
+  @SerializationProperty('address_line')
+  String address;
+  @SerializationProperty('additional_address')
+  String additionalAddress = '';
+  @SerializationProperty('city')
+  String city;
+  @SerializationProperty('state')
+  States state;
+  @SerializationProperty('zip_code')
+  int zipCode;
+}
+
+class Customer {
+  @SerializationProperty('name')
+  String name;
+  @SerializationProperty('address')
+  Address address;
+  @SerializationProperty('phone_number')
+  String phoneNumber;
+}
+
+class CustomerDatabase {
+  List<Customer> customers = [];
+}
+
+enum States {
+  Texas,
+  NewMexico
 }
 '''
 };
@@ -71,6 +123,14 @@ void main() {
   buffer = new StringBuffer();
 
   generator = new LibraryGenerator(context.libraryFor('/simple_test_model_annotated.dart'));
+  generator.write(buffer);
+
+  print(buffer.toString());
+
+  // Write out the database
+  buffer = new StringBuffer();
+
+  generator = new LibraryGenerator(context.libraryFor('/customer_database.dart'));
   generator.write(buffer);
 
   print(buffer.toString());

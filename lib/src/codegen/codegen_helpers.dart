@@ -13,8 +13,15 @@ library dogma_data.src.codegen.codegen_helpers;
 import 'package:analyzer/analyzer.dart';
 import 'package:analyzer/src/generated/element.dart';
 
+//---------------------------------------------------------------------
+// Constants
+//---------------------------------------------------------------------
+
+/// String representation of [SerializationFieldDecoder].
+const String _serializationFieldDecoderName = 'SerializationFieldDecoder';
 /// String representation of [SerializationProperty].
 const String _serializationPropertyName = 'SerializationProperty';
+
 
 /// Determines if the [annotation] corresponds to a [SerializationProperty].
 bool _isSerializationPropertyAnnotation(ElementAnnotation annotation) {
@@ -55,6 +62,48 @@ ClassDeclaration findDeclaration(ClassElement element, CompilationUnit unit) {
   return unit.declarations.firstWhere(find, orElse: () => null);
 }
 
+/// Searches for an instance of the [symbol] within the library [element].
+dynamic findSymbol(LibraryElement element, SymbolLiteral symbol) {
+  var symbolComponents = symbol.components;
+  var componentLength = symbolComponents.length;
+
+  // Determine where to look based on the length of the symbol
+  if (componentLength == 1) {
+    var functionName = symbolComponents[0].toString();
+
+    // Search for a function
+    for (var unit in element.units) {
+      for (var function in unit.functions) {
+        if (function.name == functionName) {
+          return function;
+        }
+      }
+    }
+  } else if (componentLength == 2) {
+    var className = symbolComponents[0].toString();
+    var methodName = symbolComponents[1].toString();
+
+    // Search for a method
+    for (var unit in element.units) {
+      for (var declaration in unit.types) {
+        if (declaration.name == className) {
+          var classDeclaration = declaration as ClassElement;
+          var method = classDeclaration.getMethod(methodName);
+
+          if (method != null) {
+            return method;
+          }
+        }
+      }
+    }
+  }
+
+  // \TODO Look in different libraries attached to the root
+
+  // Could not find the Symbol
+  return null;
+}
+
 /// Gets the serializable fields for the [element].
 ///
 /// Iterates over every field in the class element and uses that to implictly
@@ -66,6 +115,69 @@ Map<String, ClassElement> getSerializableFields(ClassElement element) {
   for (var field in element.fields) {
     fields[field.name] = field;
   }
+
+  return fields;
+}
+
+const String fieldString = 'field';
+const String metadataString = 'metadata';
+const String fieldSymbol = 'fieldSymbol';
+
+Map<String, Map> getFieldMetadata(ClassElement element, ClassDeclaration declaration, String metadataClass) {
+  var fields = {};
+
+  for (var member in declaration.members) {
+    if (member is FieldDeclaration) {
+      // Get the name of the field.
+      //
+      // It appears that a member variable always has a variable list with a
+      // single value. This can be used to get the name.
+      var name = member.fields.variables[0].name.toString();
+
+      // See if the metadata is referenced
+      for (var metadata in member.metadata) {
+        if (metadata.name.token.toString() == metadataClass) {
+          fields[name] = {
+              fieldString: member,
+              metadataString: metadata
+          };
+        }
+      }
+    }
+  }
+
+  return fields;
+}
+
+Map<String, Map> getAnnotatedFields(ClassElement element, ClassDeclaration declaration, bool encode) {
+  var metadataClass = encode ? 'SerializationFieldEncoder' : 'SerializationFieldDecoder';
+
+  var fields = getFieldMetadata(element, declaration, metadataClass);
+
+  fields.forEach((key, value) {
+    var metadata = value[metadataString];
+    var arguments = metadata.arguments.arguments;
+
+    // First value is the symbol
+    var symbol = arguments[0] as SymbolLiteral;
+
+    // Find the element for the symbol
+    var symbolElement = findSymbol(element.library, symbol);
+
+    value[fieldSymbol] = symbolElement;
+
+    if (symbolElement is FunctionElement) {
+      print('Found function');
+    } else if (symbolElement is MethodElement) {
+      print('Found method');
+
+      if (symbolElement.isStatic) {
+        print('Found static member');
+      } else {
+        print('Found member function');
+      }
+    }
+  });
 
   return fields;
 }
@@ -98,7 +210,9 @@ Map<String, FieldElement> getAnnotatedSerializableFields(ClassElement element, C
 
       // See if the metadata is referenced
       for (var metadata in member.metadata) {
-        if (metadata.name.token.toString() == 'SerializationProperty') {
+        var metadataToken = metadata.name.token.toString();
+
+        if (metadataToken == 'SerializationProperty') {
           // Get the actual arguments being passed in
           var arguments = metadata.arguments.arguments;
           var argumentCount = arguments.length;
@@ -131,6 +245,27 @@ Map<String, FieldElement> getAnnotatedSerializableFields(ClassElement element, C
 
           if (add) {
             computed[name] = target;
+          }
+        } else if (metadataToken == 'SerializationFieldDecoder') {
+          // Get the actual arguments being passed in
+          var arguments = metadata.arguments.arguments;
+
+          // First value is the symbol
+          var symbol = arguments[0] as SymbolLiteral;
+
+          // Find the element for the symbol
+          var symbolElement = findSymbol(element.library, symbol);
+
+          if (symbolElement is FunctionElement) {
+            print('Found function');
+          } else if (symbolElement is MethodElement) {
+            print('Found method');
+
+            if (symbolElement.isStatic) {
+              print('Found static member');
+            } else {
+              print('Found member function');
+            }
           }
         }
       }
@@ -178,4 +313,8 @@ bool isBuiltinType(DartType type) {
 /// builtin List types.
 bool isListType(DartType element) {
   return element.name == 'List';
+}
+
+bool isBuiltinListType() {
+  return false;
 }

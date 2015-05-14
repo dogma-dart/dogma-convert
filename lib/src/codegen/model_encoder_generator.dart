@@ -14,24 +14,17 @@ import 'package:analyzer/analyzer.dart';
 import 'package:analyzer/src/generated/element.dart';
 
 import 'codegen_helpers.dart';
+import 'model_converter_generator.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
-class ModelEncoderGenerator {
-  final Map<String, FieldElement> serializableFields = new Map<String, FieldElement>();
+class ModelEncoderGenerator extends ModelConverterGenerator {
+  ModelEncoderGenerator(ClassElement element, ClassDeclaration declaration)
+      : super(element, declaration);
 
-  final Set<DartType> dependencies = new Set<DartType>();
-
-  final ClassElement element;
-  final ClassDeclaration declaration;
-
-  ModelEncoderGenerator(this.element, this.declaration) {
-    _populate();
-  }
-
-  void writeEncoder(StringBuffer buffer) {
+  void write(StringBuffer buffer) {
     var modelType = element.displayName;
 
     // Write the class declaration
@@ -64,27 +57,5 @@ class ModelEncoderGenerator {
 
   void _writeBuiltinValue(StringBuffer buffer, String key, FieldElement field) {
     buffer.writeln('    output[\'$key\'] = model.${field.displayName};');
-  }
-
-  void _populate() {
-    // Get the serializable fields
-    var fields = (hasSerializationAnnotations(element))
-        ? getAnnotatedSerializableFields(element, declaration, false)
-        : getSerializableFields(element);
-
-    serializableFields.addAll(fields);
-
-    // Get the dependencies for the decoder
-    serializableFields.forEach((key, value) {
-      var check = value.type;
-
-      if (isListType(check)) {
-        check = check.typeArguments[0];
-      }
-
-      if (!isBuiltinType(check)) {
-        dependencies.add(check);
-      }
-    });
   }
 }
