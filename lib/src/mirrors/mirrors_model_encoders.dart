@@ -3,10 +3,27 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma.data.mirrors;
+/// Contains the [MirrorsModelEncoders] class.
+library dogma.data.src.mirrors.mirrors_model_encoders;
+
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
+import 'package:dogma_data/common.dart';
+
+import 'mirrors_converters.dart';
+import 'mirrors_helpers.dart';
+import 'mirrors_model_encoder.dart';
 
 /// An implementation of [ModelEncoders] using the [dart:mirrors] library.
-class MirrorsModelEncoders extends _MirrorsConverters<MirrorsModelEncoder>
+class MirrorsModelEncoders extends MirrorsConverters<MirrorsModelEncoder>
                            implements ModelEncoders
 {
   //---------------------------------------------------------------------
@@ -22,22 +39,22 @@ class MirrorsModelEncoders extends _MirrorsConverters<MirrorsModelEncoder>
 
   /// Creates an instance of the [MirrorsModelEncoders] class.
   MirrorsModelEncoders._internal(List<LibraryMirror> searchLibraries)
-      : super._internal(_encoderClassMirror, searchLibraries);
+      : super(_encoderClassMirror, searchLibraries);
 
   /// The [symbol] specified points to the root library to search for models
   /// in. If the [symbol] is null then the isolate's libraries are all loaded.
   ///
   /// This is a static method rather than a factory constructor as a factory
   /// constructor cannot be used as a function pointer.
-  static MirrorsModelEncoders _createEncoder(Symbol symbol) {
+  static MirrorsModelEncoders createEncoder(Symbol symbol) {
     // Get the MirrorsModelEncoder from the library if necessary
     if (_encoderClassMirror == null) {
-      var dogmaMirrors = currentMirrorSystem().findLibrary(new Symbol('dogma.data.mirrors'));
+      var dogmaMirrors = currentMirrorSystem().findLibrary(new Symbol('dogma.data.src.mirrors.mirrors_model_encoder'));
 
       _encoderClassMirror = dogmaMirrors.declarations[new Symbol('MirrorsModelEncoder')];
     }
 
-    return new MirrorsModelEncoders._internal(_getSearchLibraries(symbol));
+    return new MirrorsModelEncoders._internal(getSearchLibraries(symbol));
   }
 
   //---------------------------------------------------------------------

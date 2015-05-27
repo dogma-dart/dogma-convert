@@ -7,33 +7,21 @@
 library dogma.data.mirrors;
 
 //---------------------------------------------------------------------
-// Standard libraries
-//---------------------------------------------------------------------
-
-import 'dart:convert';
-import 'dart:mirrors';
-
-//---------------------------------------------------------------------
-// Package libraries
+// Imports
 //---------------------------------------------------------------------
 
 import 'package:dogma_data/common.dart';
 
-//---------------------------------------------------------------------
-// dogma.data.common library
-//---------------------------------------------------------------------
+import 'src/mirrors/mirrors_model_decoders.dart';
+import 'src/mirrors/mirrors_model_encoders.dart';
 
-part 'src/mirrors/mirrors_converters.dart';
-part 'src/mirrors/mirrors_helpers.dart';
-part 'src/mirrors/mirrors_model_decoder.dart';
-part 'src/mirrors/mirrors_model_decoders.dart';
-part 'src/mirrors/mirrors_model_encoder.dart';
-part 'src/mirrors/mirrors_model_encoders.dart';
-part 'src/mirrors/symbol_helpers.dart';
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
 
 void useMirrors() {
   configure(
-      MirrorsModelDecoders._createDecoder,
-      MirrorsModelEncoders._createEncoder
+      MirrorsModelDecoders.createDecoder,
+      MirrorsModelEncoders.createEncoder
   );
 }

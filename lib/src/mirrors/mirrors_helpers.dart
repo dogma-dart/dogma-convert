@@ -3,14 +3,28 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma.data.mirrors;
+library dogma.data.src.mirrors.mirrors_helpers;
+
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
+import 'package:dogma_data/common.dart';
+
+import 'symbol_helpers.dart';
 
 //---------------------------------------------------------------------
 // ClassMirror helpers
 //---------------------------------------------------------------------
 
 /// Gets the class mirror associated with the given [symbol].
-ClassMirror _getClassMirror(Symbol symbol, List<LibraryMirror> searchLibraries) {
+ClassMirror getClassMirror(Symbol symbol, List<LibraryMirror> searchLibraries) {
   for (var library in searchLibraries) {
     for (var declaration in library.declarations.values) {
       if (declaration is ClassMirror) {
@@ -28,7 +42,7 @@ ClassMirror _getClassMirror(Symbol symbol, List<LibraryMirror> searchLibraries) 
 // VariableMirror helpers
 //---------------------------------------------------------------------
 
-bool _isBuiltinType(TypeMirror mirror) {
+bool isBuiltinType(TypeMirror mirror) {
   Symbol simpleName = mirror.simpleName;
 
   return
@@ -39,11 +53,17 @@ bool _isBuiltinType(TypeMirror mirror) {
     (simpleName == #String);
 }
 
+bool isListType(TypeMirror mirror) {
+  Symbol simpleName = mirror.simpleName;
+
+  return simpleName == #List;
+}
+
 //---------------------------------------------------------------------
 // LibraryMirror helpers
 //---------------------------------------------------------------------
 
-List<LibraryMirror> _getSearchLibraries(Symbol symbol) {
+List<LibraryMirror> getSearchLibraries(Symbol symbol) {
   var mirrorSystem = currentMirrorSystem();
   var searchLibraries = [];
 
@@ -51,6 +71,7 @@ List<LibraryMirror> _getSearchLibraries(Symbol symbol) {
     // Search the libraries loaded into the mirrors system
     for (var library in mirrorSystem.libraries.values) {
       if (_shouldSearchLibrary(library)) {
+        print(library.simpleName);
         searchLibraries.add(library);
       }
     }
@@ -93,7 +114,7 @@ Iterable<DeclarationMirror> _getMemberVariables(ClassMirror classMirror) {
   return classMirror.declarations.values.where((m) => m is VariableMirror && !m.isStatic);
 }
 
-Map<String, VariableMirror> _getSerializableVariableFields(ClassMirror classMirror, bool encode) {
+Map<String, VariableMirror> getSerializableVariableFields(ClassMirror classMirror, bool encode) {
   var memberVariables = _getMemberVariables(classMirror);
 
   // Determine if there are serialization annotations
@@ -148,7 +169,7 @@ Map<String, VariableMirror> _getSerializableFields(Iterable<DeclarationMirror> v
 
   // Add all variables to the map
   for (var variable in variables) {
-    var parsedSymbol = _parseSymbol(variable.simpleName);
+    var parsedSymbol = parseSymbol(variable.simpleName);
 
     values[parsedSymbol] = variable;
   }

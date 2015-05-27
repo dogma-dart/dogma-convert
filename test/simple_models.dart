@@ -63,12 +63,13 @@ void verifySimpleTestModelAnnotatedSerialization(SimpleTestModelAnnotated model,
 // Tests
 //---------------------------------------------------------------------
 
-const _simpleLibrary = #dogma.data.test.simple_test_model;
-const _simpleAnnotatedLibrary = #dogma.data.test.simple_test_model_annotated;
+const _simpleLibrary = #dogma.data.test.models.simple_test_model;
+const _simpleAnnotatedLibrary = #dogma.data.test.models.simple_test_model_annotated;
 
 void testDecode() {
   var serialized = serializedSimpleTestModel;
-  var decoder = getDecoders().simpleTestModel;
+  var decoder = getDecoders(_simpleLibrary).simpleTestModel;
+  //var decoder = getDecoders().simpleTestModel;
   var decoded = decoder.convert(serialized);
 
   verifySimpleTestModelSerialization(decoded, serialized);
@@ -76,7 +77,7 @@ void testDecode() {
 
 void testDecodeAnnotated() {
   var serialized = serializedSimpleTestModelAnnotated;
-  var decoder = getDecoders().simpleTestModelAnnotated;
+  var decoder = getDecoders(_simpleAnnotatedLibrary).simpleTestModelAnnotated;
   var decoded = decoder.convert(serialized);
 
   verifySimpleTestModelAnnotatedSerialization(decoded, serialized);
@@ -94,7 +95,7 @@ void testEncode() {
       ..testString    = serialized['testString']
       ..testIntList   = serialized['testIntList'];
 
-  var encoder = getEncoders().simpleTestModel;
+  var encoder = getEncoders(_simpleLibrary).simpleTestModel;
   var encoded = encoder.convert(model);
 
   verifySimpleTestModelSerialization(model, encoded);
@@ -112,7 +113,7 @@ void testEncodeAnnotated() {
       ..testString    = serialized['test_string']
       ..testIntList   = serialized['test_int_list'];
 
-  var encoder = getEncoders().simpleTestModelAnnotated;
+  var encoder = getEncoders(_simpleAnnotatedLibrary).simpleTestModelAnnotated;
   var encoded = encoder.convert(model);
 
   verifySimpleTestModelAnnotatedSerialization(model, encoded);

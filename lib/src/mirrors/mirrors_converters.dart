@@ -3,9 +3,27 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma.data.mirrors;
+library dogma.data.src.mirrors.mirrors_converters;
 
-abstract class _MirrorsConverters<Converter> {
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
+import 'mirrors_helpers.dart';
+import 'symbol_helpers.dart';
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+
+abstract class MirrorsConverters<Converter> {
   final ClassMirror _converterClassMirror;
   final Map<Symbol, Converter> _converters = new Map<Symbol, Converter>();
   final List<LibraryMirror> _searchLibraries;
@@ -14,7 +32,7 @@ abstract class _MirrorsConverters<Converter> {
   // Construction
   //---------------------------------------------------------------------
 
-  _MirrorsConverters._internal(this._converterClassMirror, this._searchLibraries);
+  MirrorsConverters(this._converterClassMirror, this._searchLibraries);
 
   //---------------------------------------------------------------------
   // Public methods
@@ -23,8 +41,8 @@ abstract class _MirrorsConverters<Converter> {
   @override
   dynamic noSuchMethod(Invocation invocation) {
     if (invocation.isGetter) {
-      var classSymbol = _symbolToUppercase(invocation.memberName);
-      var decoder = _getConverter(new Symbol(classSymbol));
+      var classSymbol = symbolToUppercase(invocation.memberName);
+      var decoder = getConverter(new Symbol(classSymbol));
 
       if (decoder != null) {
         return decoder;
@@ -40,16 +58,16 @@ abstract class _MirrorsConverters<Converter> {
   }
 
   //---------------------------------------------------------------------
-  // Private methods
+  // Protected methods
   //---------------------------------------------------------------------
 
-  Converter _getConverter(Symbol symbol) {
+  Converter getConverter(Symbol symbol) {
     var converter = _converters[symbol];
 
     if (converter == null) {
-      var classMirror = _getClassMirror(symbol, _searchLibraries);
+      var classMirror = getClassMirror(symbol, _searchLibraries);
 
-      converter = _converterClassMirror.newInstance(new Symbol(''), [classMirror]).reflectee;
+      converter = _converterClassMirror.newInstance(new Symbol(''), [this, classMirror]).reflectee;
 
       _converters[symbol] = converter;
     }

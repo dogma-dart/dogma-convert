@@ -3,9 +3,9 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma.data.mirrors;
+library dogma.data.src.mirrors.symbol_helpers;
 
-String _parseSymbol(Symbol symbol) {
+String parseSymbol(Symbol symbol) {
   var symbolString = symbol.toString();
 
   var start = symbolString.indexOf('"');
@@ -14,8 +14,8 @@ String _parseSymbol(Symbol symbol) {
   return symbolString.substring(start + 1, end);
 }
 
-String _symbolToUppercase(Symbol symbol) {
-  var codeUnits = new List<int>.from(_parseSymbol(symbol).codeUnits);
+String symbolToUppercase(Symbol symbol) {
+  var codeUnits = new List<int>.from(parseSymbol(symbol).codeUnits);
 
   codeUnits[0] = codeUnits[0] - 32;
 

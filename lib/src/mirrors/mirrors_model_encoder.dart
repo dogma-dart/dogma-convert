@@ -3,8 +3,30 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma.data.mirrors;
+/// Contains the [MirrorsModelEncoder] class.
+library dogma.data.src.mirrors.mirrors_model_encoder;
 
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:convert';
+import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
+import 'package:dogma_data/common.dart';
+
+import 'mirrors_helpers.dart';
+import 'mirrors_model_encoders.dart';
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+/// An implementation of [ModelEncoder] using reflection.
 class MirrorsModelEncoder<Model> extends Converter<Model, Map> implements ModelEncoder<Model> {
   //---------------------------------------------------------------------
   // Member variables
@@ -20,7 +42,7 @@ class MirrorsModelEncoder<Model> extends Converter<Model, Map> implements ModelE
   //---------------------------------------------------------------------
 
   /// Creates an instance of the [MirrorsModelDecoder].
-  factory MirrorsModelEncoder([ClassMirror classMirror]) {
+  factory MirrorsModelEncoder(MirrorsModelEncoders encoders, [ClassMirror classMirror]) {
     // \FIXME Remove classMirror argument and use the following code.
     // Blocked by - https://code.google.com/p/dart/issues/detail?id=20739
     // Get the class mirror
@@ -29,7 +51,7 @@ class MirrorsModelEncoder<Model> extends Converter<Model, Map> implements ModelE
     //}
 
     // Get the serialization fields
-    var serializableFields = _getSerializableVariableFields(classMirror, false);
+    var serializableFields = getSerializableVariableFields(classMirror, false);
 
     return new MirrorsModelEncoder._internal(classMirror, serializableFields);
   }

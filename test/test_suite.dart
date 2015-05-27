@@ -11,6 +11,6 @@ import 'simple_models.dart' as simple_models;
 import 'complex_models.dart' as complex_models;
 
 void runTests() {
-  group('dogma.data.mirrors', simple_models.main);
-  group('dogma.data.mirrors', complex_models.main);
+  group('dogma.data.simple_models', simple_models.main);
+  group('dogma.data.complex_models', complex_models.main);
 }

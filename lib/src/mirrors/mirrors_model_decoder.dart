@@ -3,8 +3,33 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma.data.mirrors;
+/// Contains the [MirrorsModelDecoder] class.
+library dogma.data.src.mirrors.mirrors_model_decoder;
 
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:convert';
+import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
+import 'package:dogma_data/common.dart';
+
+import 'mirrors_helpers.dart';
+import 'mirrors_model_decoders.dart';
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+/// Decodes a [value] into an instance using a [mirror].
+typedef void _DecodeFunction(InstanceMirror mirror, dynamic value);
+
+/// An implementation of [ModelDecoder] using reflection.
 class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelDecoder<Model> {
   //---------------------------------------------------------------------
   // Member variables
@@ -12,15 +37,15 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
 
   /// The [ClassMirror] for the [Model].
   final ClassMirror _classMirror;
-  /// The serializable fields within the [Model].
-  final Map<String, VariableMirror> _serializableFields;
+
+  final Map<String, _DecodeFunction> _fieldDecoders;
 
   //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
 
   /// Creates an instance of the [MirrorsModelDecoder].
-  factory MirrorsModelDecoder([ClassMirror classMirror]) {
+  factory MirrorsModelDecoder(MirrorsModelDecoders decoders, [ClassMirror classMirror]) {
     // \FIXME Remove classMirror argument and use the following code.
     // Blocked by - https://code.google.com/p/dart/issues/detail?id=20739
     // Get the class mirror
@@ -29,15 +54,50 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
     //}
 
     // Get the serialization fields
-    var serializableFields = _getSerializableVariableFields(classMirror, false);
+    var serializableFields = getSerializableVariableFields(classMirror, false);
 
-    return new MirrorsModelDecoder._internal(classMirror, serializableFields);
+    // Generate the decode functions for the fields
+    var fieldDecoders = {};
+
+    serializableFields.forEach((key, value) {
+      var type = value.type;
+      var isList = isListType(type);
+
+      if (isList) {
+        type = type.typeArguments[0];
+      }
+
+      var field = value.simpleName;
+      var decoder;
+
+      if (isBuiltinType(type)) {
+        decoder = _builtinWrapper(field);
+      } else {
+        assert(type is ClassMirror);
+
+        if (!type.isEnum) {
+          var modelDecoder = decoders.getDecoder(type.simpleName);
+
+          decoder = (isList)
+              ? _decoderListWrapper(field, modelDecoder)
+              : _decoderWrapper(field, modelDecoder);
+        } else {
+          print('ENUMMMM');
+        }
+      }
+
+      // \TODO REMOVE if
+      if (decoder != null)
+      fieldDecoders[key] = decoder;
+    });
+
+    return new MirrorsModelDecoder._internal(classMirror, fieldDecoders);
   }
 
   /// Internal method to create an instance of the [MirrorsModelDecoder].
   ///
   /// Used to ensure that the mirror values are final.
-  MirrorsModelDecoder._internal(this._classMirror, this._serializableFields);
+  MirrorsModelDecoder._internal(this._classMirror, this._fieldDecoders);
 
   //---------------------------------------------------------------------
   // ModelDecoder
@@ -59,16 +119,41 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
     // Get the instance mirror
     var instanceMirror = reflect(model);
 
-    // Match the fields
-    input.forEach((key, value) {
-      var mirror = _serializableFields[key];
+    // Decode the fields with data present
+    _fieldDecoders.forEach((field, decoder) {
+      var value = input[field];
 
-      if (mirror != null) {
-        // Going to just set it currently...
-        instanceMirror.setField(mirror.simpleName, value);
+      if (value != null) {
+        decoder(instanceMirror, value);
       }
     });
 
     return model;
+  }
+
+  static _DecodeFunction _builtinWrapper(Symbol field) {
+    return (InstanceMirror instance, dynamic value) {
+      instance.setField(field, value);
+    };
+  }
+
+  static _DecodeFunction _decoderWrapper(Symbol field, ModelDecoder decoder) {
+    return (InstanceMirror instance, dynamic value) {
+      var current = instance.getField(field).reflectee;
+
+      instance.setField(field, decoder.convert(value, current));
+    };
+  }
+
+  static _DecodeFunction _decoderListWrapper(Symbol field, ModelDecoder decoder) {
+    return (InstanceMirror instance, List values) {
+      var converted = [];
+
+      for (var value in values) {
+        converted.add(decoder.convert(value));
+      }
+
+      instance.setField(field, converted);
+    };
   }
 }
