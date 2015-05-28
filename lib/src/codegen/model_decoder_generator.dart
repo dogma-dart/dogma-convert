@@ -55,7 +55,7 @@ class ModelDecoderGenerator extends ModelConverterGenerator {
     }
 
     // Write the create function
-    buffer.writeln('  $modelType create() => new ${modelType}();\n');
+    buffer.writeln('  $modelType create() => new $modelType();\n');
 
     // Write the convert function
     buffer.writeln('  $modelType convert(Map input, [$modelType model = null]) {');
