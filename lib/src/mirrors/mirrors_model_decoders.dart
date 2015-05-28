@@ -34,7 +34,7 @@ class MirrorsModelDecoders extends _MirrorsConverters<MirrorsModelDecoder>
   static MirrorsModelDecoders _createDecoder(Symbol symbol) {
     // Get the MirrorsModelDecoder from the library if necessary
     if (_decoderClassMirror == null) {
-      var dogmaMirrors = currentMirrorSystem().findLibrary(new Symbol('dogma.data.mirrors'));
+      var dogmaMirrors = currentMirrorSystem().findLibrary(new Symbol('dogma_data.mirrors'));
 
       _decoderClassMirror = dogmaMirrors.declarations[new Symbol('MirrorsModelDecoder')];
     }

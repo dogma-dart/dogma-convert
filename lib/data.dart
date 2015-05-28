@@ -7,10 +7,8 @@ library dogma_data;
 
 export 'package:dogma_data/common.dart' show ModelEncoder,
                                              ModelDecoder,
+                                             SerializationFieldDecoder,
                                              SerializationProperty,
+                                             SerializationValues,
                                              getEncoders,
                                              getDecoders;
-
-class SerializableLibrary {
-  const SerializableLibrary();
-}

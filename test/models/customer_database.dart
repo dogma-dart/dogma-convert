@@ -33,7 +33,13 @@ class CustomerDatabase {
   List<Customer> customers = [];
 }
 
+@SerializationValues(statesValues)
 enum States {
-  Texas,
-  NewMexico
+  texas,
+  newMexico
 }
+
+const statesValues = const {
+  'TX': States.texas,
+  'NM': States.newMexico
+};

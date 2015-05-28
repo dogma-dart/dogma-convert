@@ -5,12 +5,12 @@
 
 library dogma_data.test.test_suite;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import 'simple_models.dart' as simple_models;
 import 'complex_models.dart' as complex_models;
 
 void runTests() {
-  group('dogma.data.simple_models', simple_models.main);
-  group('dogma.data.complex_models', complex_models.main);
+  group('dogma_data.simple_models', simple_models.main);
+  //group('dogma_data.complex_models', complex_models.main);
 }

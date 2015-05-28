@@ -32,7 +32,7 @@ class MirrorsModelEncoders extends _MirrorsConverters<MirrorsModelEncoder>
   static MirrorsModelEncoders _createEncoder(Symbol symbol) {
     // Get the MirrorsModelEncoder from the library if necessary
     if (_encoderClassMirror == null) {
-      var dogmaMirrors = currentMirrorSystem().findLibrary(new Symbol('dogma.data.mirrors'));
+      var dogmaMirrors = currentMirrorSystem().findLibrary(new Symbol('dogma_data.mirrors'));
 
       _encoderClassMirror = dogmaMirrors.declarations[new Symbol('MirrorsModelEncoder')];
     }

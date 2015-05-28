@@ -10,7 +10,7 @@ library dogma_data.test.complex_models;
 //---------------------------------------------------------------------
 
 import 'package:dogma_data/data.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import 'models/customer_database.dart';
 
