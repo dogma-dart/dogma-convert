@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma.data.common;
+library dogma_data.common;
 
 //---------------------------------------------------------------------
 // Standard libraries

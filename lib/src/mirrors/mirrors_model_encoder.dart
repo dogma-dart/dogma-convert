@@ -3,28 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains the [MirrorsModelEncoder] class.
-library dogma.data.src.mirrors.mirrors_model_encoder;
-
-//---------------------------------------------------------------------
-// Standard libraries
-//---------------------------------------------------------------------
-
-import 'dart:convert';
-import 'dart:mirrors';
-
-//---------------------------------------------------------------------
-// Imports
-//---------------------------------------------------------------------
-
-import 'package:dogma_data/common.dart';
-
-import 'mirrors_helpers.dart';
-import 'mirrors_model_encoders.dart';
-
-//---------------------------------------------------------------------
-// Library contents
-//---------------------------------------------------------------------
+part of dogma_data.mirrors;
 
 /// An implementation of [ModelEncoder] using reflection.
 class MirrorsModelEncoder<Model> extends Converter<Model, Map> implements ModelEncoder<Model> {
@@ -51,7 +30,7 @@ class MirrorsModelEncoder<Model> extends Converter<Model, Map> implements ModelE
     //}
 
     // Get the serialization fields
-    var serializableFields = getSerializableVariableFields(classMirror, false);
+    var serializableFields = _getSerializableVariableFields(classMirror, false);
 
     return new MirrorsModelEncoder._internal(classMirror, serializableFields);
   }

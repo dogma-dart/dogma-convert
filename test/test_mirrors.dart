@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma.data.test.test_mirrors;
+library dogma_data.test.test_mirrors;
 
 import 'package:dogma_data/mirrors.dart';
 

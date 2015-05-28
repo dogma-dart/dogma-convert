@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains the [LibraryGenerator] class.
-library dogma.data.codegen.library_generator;
+library dogma_data.src.codegen.library_generator;
 
 //---------------------------------------------------------------------
 // Imports

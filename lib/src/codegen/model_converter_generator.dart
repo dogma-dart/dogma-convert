@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains the [ModelConverterGenerator] class.
-library dogma.data.codegen.model_converter_generator;
+library dogma_data.src.codegen.model_converter_generator;
 
 //---------------------------------------------------------------------
 // Imports

@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma.data.test.simple_models;
+library dogma_data.test.simple_models;
 
 //---------------------------------------------------------------------
 // Imports
@@ -63,8 +63,8 @@ void verifySimpleTestModelAnnotatedSerialization(SimpleTestModelAnnotated model,
 // Tests
 //---------------------------------------------------------------------
 
-const _simpleLibrary = #dogma.data.test.models.simple_test_model;
-const _simpleAnnotatedLibrary = #dogma.data.test.models.simple_test_model_annotated;
+const _simpleLibrary = #dogma_data.test.models.simple_test_model;
+const _simpleAnnotatedLibrary = #dogma_data.test.models.simple_test_model_annotated;
 
 void testDecode() {
   var serialized = serializedSimpleTestModel;

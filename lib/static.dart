@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Implementation of the [dogma.data] services using statically generated code.
-library dogma.data.static;
+library dogma_data.static;
 
 import 'package:dogma_data/common.dart';
 

@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma.data.test.models.customer_database;
+library dogma_data.test.models.customer_database;
 
 import 'package:dogma_data/common.dart';
 
@@ -14,7 +14,7 @@ class Address {
   String additionalAddress = '';
   @SerializationProperty('city')
   String city;
-  @SerializationProperty('state')
+  //@SerializationProperty('state')
   States state;
   @SerializationProperty('zip_code')
   int zipCode;

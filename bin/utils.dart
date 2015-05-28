@@ -8,7 +8,7 @@
 // Note, this is just for simple tests, so we restricted the logic to only
 // support root-relative imports. For more sophisticated stuff, you should be
 // using the test helpers in `package:code_transformers`.
-library dogma.bin.utils;
+library dogma_data.bin.utils;
 
 import 'package:analyzer/src/generated/element.dart';
 import 'package:analyzer/src/generated/engine.dart';

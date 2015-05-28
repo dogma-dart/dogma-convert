@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains the [ModelEncoderGenerator] class.
-library dogma.data.codegen.model_encoder_generator;
+library dogma_data.src.codegen.model_encoder_generator;
 
 //---------------------------------------------------------------------
 // Imports

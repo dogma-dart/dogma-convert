@@ -3,28 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains the [MirrorsModelDecoder] class.
-library dogma.data.src.mirrors.mirrors_model_decoder;
-
-//---------------------------------------------------------------------
-// Standard libraries
-//---------------------------------------------------------------------
-
-import 'dart:convert';
-import 'dart:mirrors';
-
-//---------------------------------------------------------------------
-// Imports
-//---------------------------------------------------------------------
-
-import 'package:dogma_data/common.dart';
-
-import 'mirrors_helpers.dart';
-import 'mirrors_model_decoders.dart';
-
-//---------------------------------------------------------------------
-// Library contents
-//---------------------------------------------------------------------
+part of dogma_data.mirrors;
 
 /// Decodes a [value] into an instance using a [mirror].
 typedef void _DecodeFunction(InstanceMirror mirror, dynamic value);
@@ -54,9 +33,7 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
     //}
 
     // Get the serialization fields
-    var serializableFields = getSerializableVariableFields(classMirror, false);
-
-    // Generate the decode functions for the fields
+    var serializableFields = _getSerializableVariableFields(classMirror, false);
     var fieldDecoders = {};
 
     serializableFields.forEach((key, value) {
@@ -70,7 +47,7 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
       var field = value.simpleName;
       var decoder;
 
-      if (isBuiltinType(type)) {
+      if (_isBuiltinType(type)) {
         decoder = _builtinWrapper(field);
       } else {
         assert(type is ClassMirror);

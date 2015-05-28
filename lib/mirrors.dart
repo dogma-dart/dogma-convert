@@ -4,24 +4,36 @@
 // the LICENSE file.
 
 /// Implementation of the [dogma.data] services using mirrors.
-library dogma.data.mirrors;
+library dogma_data.mirrors;
 
 //---------------------------------------------------------------------
-// Imports
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:convert';
+import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Package libraries
 //---------------------------------------------------------------------
 
 import 'package:dogma_data/common.dart';
 
-import 'src/mirrors/mirrors_model_decoders.dart';
-import 'src/mirrors/mirrors_model_encoders.dart';
+//---------------------------------------------------------------------
+// dogma.data.common library
+//---------------------------------------------------------------------
 
-//---------------------------------------------------------------------
-// Library contents
-//---------------------------------------------------------------------
+part 'src/mirrors/mirrors_converters.dart';
+part 'src/mirrors/mirrors_helpers.dart';
+part 'src/mirrors/mirrors_model_decoder.dart';
+part 'src/mirrors/mirrors_model_decoders.dart';
+part 'src/mirrors/mirrors_model_encoder.dart';
+part 'src/mirrors/mirrors_model_encoders.dart';
+part 'src/mirrors/symbol_helpers.dart';
 
 void useMirrors() {
   configure(
-      MirrorsModelDecoders.createDecoder,
-      MirrorsModelEncoders.createEncoder
+      MirrorsModelDecoders._createDecoder,
+      MirrorsModelEncoders._createEncoder
   );
 }

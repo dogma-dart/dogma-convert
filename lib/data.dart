@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma.data;
+library dogma_data;
 
 export 'package:dogma_data/common.dart' show ModelEncoder,
                                              ModelDecoder,

@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma.generate_static;
+library dogma_data.bin.generate_static;
 
 //---------------------------------------------------------------------
 // Imports
@@ -19,9 +19,9 @@ import 'utils.dart';
 
 // \TODO Currently just running sources manually
 
-const _SOURCES = const {
+const _sources = const {
   '/simple_test_model.dart': '''
-library dogma.data.test.simple_test_model;
+library dogma_data.test.simple_test_model;
 class SimpleTestModel {
   int testInt;
   double testDouble;
@@ -32,7 +32,7 @@ class SimpleTestModel {
 }
 ''',
   '/simple_test_model_annotated.dart': '''
-library dogma.data.test.simple_test_model_annotated;
+library dogma_data.test.simple_test_model_annotated;
 import 'package:dogma_data/common.dart';
 
 class Foo {
@@ -67,7 +67,7 @@ class SimpleTestModelAnnotated {
 }
 ''',
   '/customer_database.dart': '''
-library dogma.data.test.models.customer_database;
+library dogma_data.test.models.customer_database;
 
 import 'package:dogma_data/common.dart';
 
@@ -106,7 +106,7 @@ enum States {
 
 
 void main() {
-  var context = initAnalyzer(_SOURCES);
+  var context = initAnalyzer(_sources);
 
   var buffer;
   var generator;

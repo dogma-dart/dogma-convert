@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma.data.test.models.simple_test_model_annotated;
+library dogma_data.test.models.simple_test_model_annotated;
 
 import 'package:dogma_data/common.dart';
 

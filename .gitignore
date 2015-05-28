@@ -14,5 +14,8 @@ packages/
 # Include when developing application packages.
 pubspec.lock
 
+# WebStorm files
+.idea/
+
 # Ignore generated code in tests
 test/generated

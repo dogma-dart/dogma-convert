@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma.data.common;
+part of dogma_data.common;
 
 /// Metadata for specifying the mapping between a variable and [Map] data.
 ///

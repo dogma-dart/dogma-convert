@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma.data.test.test_static;
+library dogma_data.test.test_static;
 
 import 'package:dogma_data/static.dart';
 
