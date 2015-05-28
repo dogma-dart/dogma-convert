@@ -3,11 +3,17 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma_data.common;
+/// Contains the [ModelDecoders] interface.
+library dogma_data.src.common.model_decoders;
 
-/// An interface to query a [ModelDecoder].
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+/// An interface to retrieve the [ModelDecoder]s in a library.
 ///
-/// An instance of [ModelDecoders] cannot be created directly. Instead use the
-/// [getDecoders] function to retrieve.
+///     var personDecoder = modelDecoders.person as ModelDecoder<Person>;
+///
+///     var person = personDecoder.convert(data);
 @proxy
 class ModelDecoders {}

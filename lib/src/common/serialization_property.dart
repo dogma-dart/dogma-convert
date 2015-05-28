@@ -3,13 +3,18 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma_data.common;
+/// Contains the [SerializationProperty] annotation.
+library dogma_data.src.common.serialization_property;
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
 
 /// Metadata for specifying the mapping between a variable and [Map] data.
 ///
-/// The [SerializationProperty] specifies how a member variable should be
-/// serialized to and from a [Map]. The serialization doesn't have to be two
-/// way. A value can be ignored when encoding or when decoding.
+/// The [SerializationProperty] annotation specifies how a member variable
+/// should be serialized to and from a [Map]. The serialization doesn't have to
+/// be two way. A value can be ignored when encoding or when decoding.
 ///
 ///     class TestModel {
 ///       @SerializationProperty('foo')
@@ -19,6 +24,10 @@ part of dogma_data.common;
 ///       @SerializationProperty('bar_no_decode', decode: false)
 ///       int barDontDecode;
 ///     }
+///
+/// If a [SerializationProperty] is present within a model then it is assumed
+/// that explicit serialization is being used. All serialization fields need to
+/// be specified within the model for serialization to function.
 class SerializationProperty {
   /// The name within the [Map] for the property.
   final String name;

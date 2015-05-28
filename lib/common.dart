@@ -6,21 +6,27 @@
 library dogma_data.common;
 
 //---------------------------------------------------------------------
-// Standard libraries
+// Imports
 //---------------------------------------------------------------------
 
-import 'dart:convert';
+import 'src/common/model_decoders.dart';
+import 'src/common/model_encoders.dart';
 
 //---------------------------------------------------------------------
-// dogma.data.common library
+// Exports
 //---------------------------------------------------------------------
 
-part 'src/common/model_decoder.dart';
-part 'src/common/model_decoders.dart';
-part 'src/common/model_encoder.dart';
-part 'src/common/model_encoders.dart';
-part 'src/common/serialization_property.dart';
-part 'src/common/serialization_value.dart';
+export 'src/common/model_decoder.dart';
+export 'src/common/model_decoders.dart';
+export 'src/common/model_encoder.dart';
+export 'src/common/model_encoders.dart';
+export 'src/common/serialization_field_decoder.dart';
+export 'src/common/serialization_property.dart';
+export 'src/common/serialization_values.dart';
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
 
 /// Creates an instance of [ModelDecoders] given the [library] symbol.
 typedef ModelDecoders ModelDecodersFactory(Symbol library);
@@ -32,7 +38,7 @@ ModelDecodersFactory _modelDecodersFactory;
 /// The [ModelEncodersFactory] to use with [getEncoders].
 ModelEncodersFactory _modelEncodersFactory;
 
-/// Configures the [dogma.dart] library.
+/// Configures the [dogma_dart] library.
 void configure(ModelDecodersFactory decodersFactory, ModelEncodersFactory encodersFactory) {
   _modelDecodersFactory = decodersFactory;
   _modelEncodersFactory = encodersFactory;
