@@ -6,15 +6,19 @@
 part of dogma_data.mirrors;
 
 /// An implementation of [ModelDecoders] using the [dart:mirrors] library.
-class MirrorsModelDecoders extends _MirrorsConverters<MirrorsModelDecoder>
+class MirrorsModelDecoders extends _MirrorsModelConverters<ModelDecoder>
                            implements ModelDecoders
 {
   //---------------------------------------------------------------------
   // Class variables
   //---------------------------------------------------------------------
 
-  /// The [ClassMirror] for [MirrorModelDecoder].
-  static ClassMirror _decoderClassMirror;
+  /// The [ClassMirror] for [MirrorsModelDecoder].
+  static ClassMirror _decoderMirror;
+  /// The [ClassMirror] for [ModelDecoder].
+  static ClassMirror _decoderInterfaceMirror;
+  /// The [ClassMirror] for [CompositeModelDecoder].
+  static ClassMirror _compositeDecoderMirror;
 
   //---------------------------------------------------------------------
   // Construction
@@ -22,7 +26,7 @@ class MirrorsModelDecoders extends _MirrorsConverters<MirrorsModelDecoder>
 
   /// Creates an instance of the [MirrorsModelDecoders] class.
   MirrorsModelDecoders._internal(List<LibraryMirror> searchLibraries)
-      : super._internal(_decoderClassMirror, searchLibraries);
+      : super._internal(_decoderMirror, _decoderInterfaceMirror, _compositeDecoderMirror, searchLibraries);
 
   /// Factory method for creating a [MirrorsModelDecoders].
   ///
@@ -32,11 +36,23 @@ class MirrorsModelDecoders extends _MirrorsConverters<MirrorsModelDecoder>
   /// This is a static method rather than a factory constructor as a factory
   /// constructor cannot be used as a function pointer.
   static MirrorsModelDecoders _createDecoder(Symbol symbol) {
-    // Get the MirrorsModelDecoder from the library if necessary
-    if (_decoderClassMirror == null) {
-      var dogmaMirrors = currentMirrorSystem().findLibrary(new Symbol('dogma_data.mirrors'));
+    // Get the decoder classes from the library if necessary
+    if (_decoderMirror == null) {
+      var mirrorSystem = currentMirrorSystem();
+      var library;
 
-      _decoderClassMirror = dogmaMirrors.declarations[new Symbol('MirrorsModelDecoder')];
+      // Get the mirror decoder implementation
+      library = mirrorSystem.findLibrary(new Symbol('dogma_data.mirrors'));
+      _decoderMirror = library.declarations[new Symbol('MirrorsModelDecoder')];
+      assert(_decoderMirror != null);
+
+      // Get the decoder implementation
+      library = mirrorSystem.findLibrary(new Symbol('dogma_data.src.common.model_decoder'));
+      _decoderInterfaceMirror = library.declarations[new Symbol('ModelDecoder')];
+
+      // Get the composite decoder implementation
+      library = mirrorSystem.findLibrary(new Symbol('dogma_data.src.common.composite_model_decoder'));
+      _compositeDecoderMirror = library.declarations[new Symbol('CompositeModelDecoder')];
     }
 
     return new MirrorsModelDecoders._internal(_getSearchLibraries(symbol));

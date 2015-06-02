@@ -23,8 +23,8 @@ import 'package:dogma_data/common.dart';
 // dogma.data.common library
 //---------------------------------------------------------------------
 
-part 'src/mirrors/mirrors_converters.dart';
 part 'src/mirrors/mirrors_helpers.dart';
+part 'src/mirrors/mirrors_model_converters.dart';
 part 'src/mirrors/mirrors_model_decoder.dart';
 part 'src/mirrors/mirrors_model_decoders.dart';
 part 'src/mirrors/mirrors_model_encoder.dart';

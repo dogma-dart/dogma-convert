@@ -6,7 +6,7 @@
 part of dogma_data.mirrors;
 
 /// An implementation of [ModelEncoders] using the [dart:mirrors] library.
-class MirrorsModelEncoders extends _MirrorsConverters<MirrorsModelEncoder>
+class MirrorsModelEncoders extends _MirrorsModelConverters<MirrorsModelEncoder>
                            implements ModelEncoders
 {
   //---------------------------------------------------------------------
@@ -14,7 +14,11 @@ class MirrorsModelEncoders extends _MirrorsConverters<MirrorsModelEncoder>
   //---------------------------------------------------------------------
 
   /// The [ClassMirror] for [MirrorModelEncoder].
-  static ClassMirror _encoderClassMirror;
+  static ClassMirror _encoderMirror;
+  /// The [ClassMirror] for [ModelEncoder].
+  static ClassMirror _encoderInterfaceMirror;
+  /// The [ClassMirror] for [CompositeModelEncoder].
+  static ClassMirror _compositeEncoderMirror;
 
   //---------------------------------------------------------------------
   // Construction
@@ -22,7 +26,7 @@ class MirrorsModelEncoders extends _MirrorsConverters<MirrorsModelEncoder>
 
   /// Creates an instance of the [MirrorsModelEncoders] class.
   MirrorsModelEncoders._internal(List<LibraryMirror> searchLibraries)
-      : super._internal(_encoderClassMirror, searchLibraries);
+      : super._internal(_encoderMirror, _encoderInterfaceMirror, _compositeEncoderMirror, searchLibraries);
 
   /// The [symbol] specified points to the root library to search for models
   /// in. If the [symbol] is null then the isolate's libraries are all loaded.
@@ -31,10 +35,22 @@ class MirrorsModelEncoders extends _MirrorsConverters<MirrorsModelEncoder>
   /// constructor cannot be used as a function pointer.
   static MirrorsModelEncoders _createEncoder(Symbol symbol) {
     // Get the MirrorsModelEncoder from the library if necessary
-    if (_encoderClassMirror == null) {
-      var dogmaMirrors = currentMirrorSystem().findLibrary(new Symbol('dogma_data.mirrors'));
+    if (_encoderMirror == null) {
+      var mirrorSystem = currentMirrorSystem();
+      var library;
 
-      _encoderClassMirror = dogmaMirrors.declarations[new Symbol('MirrorsModelEncoder')];
+      // Get the mirror decoder implementation
+      library = mirrorSystem.findLibrary(new Symbol('dogma_data.mirrors'));
+      _encoderMirror = library.declarations[new Symbol('MirrorsModelEncoder')];
+      assert(_encoderMirror != null);
+
+      // Get the decoder implementation
+      library = mirrorSystem.findLibrary(new Symbol('dogma_data.src.common.model_encoder'));
+      _encoderInterfaceMirror = library.declarations[new Symbol('ModelEncoder')];
+
+      // Get the composite decoder implementation
+      library = mirrorSystem.findLibrary(new Symbol('dogma_data.src.common.composite_model_encoder'));
+      _compositeEncoderMirror = library.declarations[new Symbol('CompositeModelEncoder')];
     }
 
     return new MirrorsModelEncoders._internal(_getSearchLibraries(symbol));

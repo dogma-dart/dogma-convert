@@ -5,8 +5,12 @@
 
 part of dogma_data.mirrors;
 
-abstract class _MirrorsConverters<Converter> {
+abstract class _MirrorsModelConverters<Converter> {
+  static const _defaultConstructor = const Symbol('');
+
   final ClassMirror _converterClassMirror;
+  final ClassMirror _converterInterfaceClassMirror;
+  final ClassMirror _compositeConverterClassMirror;
   final Map<Symbol, Converter> _converters = new Map<Symbol, Converter>();
   final List<LibraryMirror> _searchLibraries;
 
@@ -14,7 +18,10 @@ abstract class _MirrorsConverters<Converter> {
   // Construction
   //---------------------------------------------------------------------
 
-  _MirrorsConverters._internal(this._converterClassMirror, this._searchLibraries);
+  _MirrorsModelConverters._internal(this._converterClassMirror,
+                               this._converterInterfaceClassMirror,
+                               this._compositeConverterClassMirror,
+                               this._searchLibraries);
 
   //---------------------------------------------------------------------
   // Public methods
@@ -47,9 +54,25 @@ abstract class _MirrorsConverters<Converter> {
     var converter = _converters[symbol];
 
     if (converter == null) {
+      // Get the class mirror for the symbol
       var classMirror = _getClassMirror(symbol, _searchLibraries);
 
-      converter = _converterClassMirror.newInstance(new Symbol(''), [this, classMirror]).reflectee;
+      converter = _converterClassMirror.newInstance(_defaultConstructor, [this, classMirror]).reflectee;
+
+      // Determine if there are any custom converters
+      var converterMirrors = getClassConvertersOfType(symbol, _converterInterfaceClassMirror.simpleName, _searchLibraries);
+
+      if (converterMirrors.length > 0) {
+        var converters = [ converter ];
+
+        for (var converterMirror in converterMirrors) {
+          var instance = converterMirror.newInstance(_defaultConstructor, []).reflectee;
+
+          converters.add(instance);
+        }
+
+        converter = _compositeConverterClassMirror.newInstance(_defaultConstructor, [ converters ]).reflectee;
+      }
 
       _converters[symbol] = converter;
     }

@@ -9,8 +9,10 @@ import 'package:test/test.dart';
 
 import 'simple_models.dart' as simple_models;
 import 'complex_models.dart' as complex_models;
+import 'custom_converter.dart' as custom_decoder;
 
 void runTests() {
   group('dogma_data.simple_models', simple_models.main);
-  //group('dogma_data.complex_models', complex_models.main);
+  group('dogma_data.complex_models', complex_models.main);
+  group('dogma_data.custom_decoder', custom_decoder.main);
 }

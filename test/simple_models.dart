@@ -69,7 +69,6 @@ const _simpleAnnotatedLibrary = #dogma_data.test.models.simple_test_model_annota
 void testDecode() {
   var serialized = serializedSimpleTestModel;
   var decoder = getDecoders(_simpleLibrary).simpleTestModel;
-  //var decoder = getDecoders().simpleTestModel;
   var decoded = decoder.convert(serialized);
 
   verifySimpleTestModelSerialization(decoded, serialized);

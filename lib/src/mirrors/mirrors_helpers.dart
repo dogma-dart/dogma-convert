@@ -24,6 +24,26 @@ ClassMirror _getClassMirror(Symbol symbol, List<LibraryMirror> searchLibraries) 
   return null;
 }
 
+List<ClassMirror> getClassConvertersOfType(Symbol symbol, Symbol converter, List<LibraryMirror> searchLibraries) {
+  var converters = [];
+
+  for (var library in searchLibraries) {
+    for (var declaration in library.declarations.values) {
+      if (declaration is ClassMirror) {
+        for (var superinterface in declaration.superinterfaces) {
+          if ((superinterface.simpleName == converter) && (superinterface.typeArguments[0].simpleName == symbol)) {
+            converters.add(declaration);
+
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  return converters;
+}
+
 //---------------------------------------------------------------------
 // VariableMirror helpers
 //---------------------------------------------------------------------
