@@ -3,10 +3,32 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma_data.mirrors;
+/// Contains the [MirrorsModelEncoders] class.
+library dogma_data.src.mirrors.mirrors_model_encoders;
+
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
+import 'package:dogma_data/common.dart';
+
+import 'mirrors_helpers.dart';
+import 'mirrors_model_converters.dart';
+import 'mirrors_model_encoder.dart';
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
 
 /// An implementation of [ModelEncoders] using the [dart:mirrors] library.
-class MirrorsModelEncoders extends _MirrorsModelConverters<MirrorsModelEncoder>
+class MirrorsModelEncoders extends MirrorsModelConverters<ModelEncoder>
                            implements ModelEncoders
 {
   //---------------------------------------------------------------------
@@ -26,21 +48,21 @@ class MirrorsModelEncoders extends _MirrorsModelConverters<MirrorsModelEncoder>
 
   /// Creates an instance of the [MirrorsModelEncoders] class.
   MirrorsModelEncoders._internal(List<LibraryMirror> searchLibraries)
-      : super._internal(_encoderMirror, _encoderInterfaceMirror, _compositeEncoderMirror, searchLibraries);
+      : super(_encoderMirror, _encoderInterfaceMirror, _compositeEncoderMirror, searchLibraries);
 
   /// The [symbol] specified points to the root library to search for models
   /// in. If the [symbol] is null then the isolate's libraries are all loaded.
   ///
   /// This is a static method rather than a factory constructor as a factory
   /// constructor cannot be used as a function pointer.
-  static MirrorsModelEncoders _createEncoder(Symbol symbol) {
+  static MirrorsModelEncoders createEncoder(Symbol symbol) {
     // Get the MirrorsModelEncoder from the library if necessary
     if (_encoderMirror == null) {
       var mirrorSystem = currentMirrorSystem();
       var library;
 
       // Get the mirror decoder implementation
-      library = mirrorSystem.findLibrary(new Symbol('dogma_data.mirrors'));
+      library = mirrorSystem.findLibrary(new Symbol('dogma_data.src.mirrors.mirrors_model_encoder'));
       _encoderMirror = library.declarations[new Symbol('MirrorsModelEncoder')];
       assert(_encoderMirror != null);
 
@@ -53,14 +75,6 @@ class MirrorsModelEncoders extends _MirrorsModelConverters<MirrorsModelEncoder>
       _compositeEncoderMirror = library.declarations[new Symbol('CompositeModelEncoder')];
     }
 
-    return new MirrorsModelEncoders._internal(_getSearchLibraries(symbol));
-  }
-
-  //---------------------------------------------------------------------
-  // ModelEncoders
-  //---------------------------------------------------------------------
-
-  ModelEncoder getEncoder(Symbol symbol) {
-    return _getConverter(symbol);
+    return new MirrorsModelEncoders._internal(getSearchLibraries(symbol));
   }
 }

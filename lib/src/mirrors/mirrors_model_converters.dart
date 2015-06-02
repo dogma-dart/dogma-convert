@@ -3,10 +3,41 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma_data.mirrors;
+/// Contains the [MirrorsModelConverters] class.
+library dogma_data.src.mirrors.mirrors_model_converters;
 
-abstract class _MirrorsModelConverters<Converter> {
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
+import 'mirrors_helpers.dart';
+import 'symbol_helpers.dart';
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+/// Base class for retrieving a [Converter].
+///
+/// The [MirrorsModelConverters] can generate [Converter]s through the mirrors
+/// interface.
+abstract class MirrorsModelConverters<Converter> {
+  //---------------------------------------------------------------------
+  // Class variables
+  //---------------------------------------------------------------------
+
+  /// Symbol for the default constructor.
   static const _defaultConstructor = const Symbol('');
+
+  //---------------------------------------------------------------------
+  // Member variables
+  //---------------------------------------------------------------------
 
   final ClassMirror _converterClassMirror;
   final ClassMirror _converterInterfaceClassMirror;
@@ -18,10 +49,10 @@ abstract class _MirrorsModelConverters<Converter> {
   // Construction
   //---------------------------------------------------------------------
 
-  _MirrorsModelConverters._internal(this._converterClassMirror,
-                               this._converterInterfaceClassMirror,
-                               this._compositeConverterClassMirror,
-                               this._searchLibraries);
+  MirrorsModelConverters(this._converterClassMirror,
+                         this._converterInterfaceClassMirror,
+                         this._compositeConverterClassMirror,
+                         this._searchLibraries);
 
   //---------------------------------------------------------------------
   // Public methods
@@ -30,8 +61,8 @@ abstract class _MirrorsModelConverters<Converter> {
   @override
   dynamic noSuchMethod(Invocation invocation) {
     if (invocation.isGetter) {
-      var classSymbol = _symbolToUppercase(invocation.memberName);
-      var decoder = _getConverter(new Symbol(classSymbol));
+      var classSymbol = camelToPascalCase(invocation.memberName);
+      var decoder = getConverter(new Symbol(classSymbol));
 
       if (decoder != null) {
         return decoder;
@@ -47,15 +78,18 @@ abstract class _MirrorsModelConverters<Converter> {
   }
 
   //---------------------------------------------------------------------
-  // Private methods
+  // Protected methods
   //---------------------------------------------------------------------
 
-  Converter _getConverter(Symbol symbol) {
+  /// Retrieves a converter with the given [symbol].
+  ///
+  /// Warning! For internal use only by subclasses.
+  Converter getConverter(Symbol symbol) {
     var converter = _converters[symbol];
 
     if (converter == null) {
       // Get the class mirror for the symbol
-      var classMirror = _getClassMirror(symbol, _searchLibraries);
+      var classMirror = getClassMirror(symbol, _searchLibraries);
 
       converter = _converterClassMirror.newInstance(_defaultConstructor, [this, classMirror]).reflectee;
 

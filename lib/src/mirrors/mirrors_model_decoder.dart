@@ -3,7 +3,28 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma_data.mirrors;
+/// Contains the [MirrorsModelDecoder] class.
+library dogma_data.src.mirrors.mirrors_model_decoder;
+
+//---------------------------------------------------------------------
+// Standard libraries
+//---------------------------------------------------------------------
+
+import 'dart:convert';
+import 'dart:mirrors';
+
+//---------------------------------------------------------------------
+// Imports
+//---------------------------------------------------------------------
+
+import 'package:dogma_data/common.dart';
+
+import 'mirrors_helpers.dart';
+import 'mirrors_model_decoders.dart';
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
 
 /// Decodes a [value] into an instance using a [mirror].
 typedef void _DecodeFunction(InstanceMirror mirror, dynamic value);
@@ -24,7 +45,7 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
   //---------------------------------------------------------------------
 
   /// Creates an instance of the [MirrorsModelDecoder].
-  factory MirrorsModelDecoder(MirrorsModelDecoders decoders, [ClassMirror classMirror]) {
+  factory MirrorsModelDecoder(MirrorsModelDecoders decoders, ClassMirror classMirror) {
     // \FIXME Remove classMirror argument and use the following code.
     // Blocked by - https://code.google.com/p/dart/issues/detail?id=20739
     // Get the class mirror
@@ -33,7 +54,7 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
     //}
 
     // Get the serialization fields
-    var serializableFields = _getSerializableVariableFields(classMirror, false);
+    var serializableFields = getSerializableVariableFields(classMirror, false);
     var fieldDecoders = {};
 
     serializableFields.forEach((key, value) {
@@ -47,13 +68,13 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
       var field = value.simpleName;
       var decoder;
 
-      if (_isBuiltinType(type)) {
+      if (isBuiltinType(type)) {
         decoder = _builtinWrapper(field);
       } else {
         assert(type is ClassMirror);
 
         if (!type.isEnum) {
-          var modelDecoder = decoders.getDecoder(type.simpleName);
+          var modelDecoder = decoders.getConverter(type.simpleName);
 
           decoder = (isList)
               ? _decoderListWrapper(field, modelDecoder)

@@ -3,9 +3,19 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-part of dogma_data.mirrors;
+/// Contains functions for working with [Symbol]s.
+library dogma_data.src.mirrors.symbol_helpers;
 
-String _parseSymbol(Symbol symbol) {
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
+
+/// Parses a [symbol] into a string.
+///
+/// The toString method on [Symbol] puts quotation marks around the name of the
+/// symbol. This function returns the actual symbol name by removing the
+/// quotation marks.
+String parseSymbol(Symbol symbol) {
   var symbolString = symbol.toString();
 
   var start = symbolString.indexOf('"');
@@ -14,8 +24,13 @@ String _parseSymbol(Symbol symbol) {
   return symbolString.substring(start + 1, end);
 }
 
-String _symbolToUppercase(Symbol symbol) {
-  var codeUnits = new List<int>.from(_parseSymbol(symbol).codeUnits);
+/// Converts a [symbol] in camel case into pascal case.
+///
+/// Pascal case always begins with a capital letter, while camel case begins
+/// with a lower case letter. The function gets the symbol as a string and then
+/// converts the first letter to be upper case.
+String camelToPascalCase(Symbol symbol) {
+  var codeUnits = new List<int>.from(parseSymbol(symbol).codeUnits);
 
   codeUnits[0] = codeUnits[0] - 32;
 
