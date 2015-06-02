@@ -73,26 +73,17 @@ List<LibraryMirror> _getSearchLibraries(Symbol symbol) {
   var mirrorSystem = currentMirrorSystem();
   var searchLibraries = [];
 
-  if (symbol == null) {
-    // Search the libraries loaded into the mirrors system
-    for (var library in mirrorSystem.libraries.values) {
-      if (_shouldSearchLibrary(library)) {
-        searchLibraries.add(library);
-      }
-    }
-  } else {
-    var rootLibrary = mirrorSystem.findLibrary(symbol);
+  var rootLibrary = mirrorSystem.findLibrary(symbol);
 
-    // Add the imported library
-    searchLibraries.add(rootLibrary);
+  // Add the imported library
+  searchLibraries.add(rootLibrary);
 
-    // Search the dependencies of the given library
-    for (var dependency in rootLibrary.libraryDependencies) {
-      var library = dependency.targetLibrary;
+  // Search the dependencies of the given library
+  for (var dependency in rootLibrary.libraryDependencies) {
+    var library = dependency.targetLibrary;
 
-      if (_shouldSearchLibrary(library)) {
-        searchLibraries.add(library);
-      }
+    if (_shouldSearchLibrary(library)) {
+      searchLibraries.add(library);
     }
   }
 
