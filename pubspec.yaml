@@ -4,6 +4,6 @@ description: Data serialization for Dart.
 dependencies:
   analyzer: any
   code_transformers: any
-  test: any
 dev_dependencies:
   coverage: any
+  test: any
