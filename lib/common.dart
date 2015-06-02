@@ -16,6 +16,8 @@ import 'src/common/model_encoders.dart';
 // Exports
 //---------------------------------------------------------------------
 
+export 'src/common/composite_model_decoder.dart';
+export 'src/common/composite_model_encoder.dart';
 export 'src/common/model_decoder.dart';
 export 'src/common/model_decoders.dart';
 export 'src/common/model_encoder.dart';
@@ -38,16 +40,18 @@ ModelDecodersFactory _modelDecodersFactory;
 /// The [ModelEncodersFactory] to use with [getEncoders].
 ModelEncodersFactory _modelEncodersFactory;
 
-/// Configures the [dogma_dart] library.
+/// Configures the [dogma_data] library.
 void configure(ModelDecodersFactory decodersFactory, ModelEncodersFactory encodersFactory) {
   _modelDecodersFactory = decodersFactory;
   _modelEncodersFactory = encodersFactory;
 }
 
-ModelDecoders getDecoders([Symbol library]) {
+/// Gets the [ModelDecoders] for the given [library].
+ModelDecoders getDecoders(Symbol library) {
   return _modelDecodersFactory(library);
 }
 
-ModelEncoders getEncoders([Symbol library]) {
+/// Gets the [ModelEncoders] for the given [library].
+ModelEncoders getEncoders(Symbol library) {
   return _modelEncodersFactory(library);
 }
