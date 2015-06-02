@@ -18,7 +18,7 @@ import 'dart:convert';
 
 /// Interface for decoding a [Model] from a [Map].
 ///
-/// The [ModelDecoder] takes a [Map] as a input and converts it into a Plain
+/// The [ModelDecoder] takes a [Map] as input and converts it into a Plain
 /// Old Dart Object (PODO). Its behavior is defined by an explicit or implicit
 /// serialization on the [Model].
 abstract class ModelDecoder<Model> implements Converter<Map, Model> {
