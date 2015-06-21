@@ -75,6 +75,8 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
 
       if (isBuiltinType(type)) {
         decoder = _builtinWrapper(field);
+      } else if (type.simpleName == #DateTime) {
+        decoder = _dateTimeWrapper(field);
       } else {
         assert(type is ClassMirror);
 
@@ -137,6 +139,12 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
   static _DecodeFunction _builtinWrapper(Symbol field) {
     return (InstanceMirror instance, dynamic value) {
       instance.setField(field, value);
+    };
+  }
+
+  static _DecodeFunction _dateTimeWrapper(Symbol field) {
+    return (InstanceMirror instance, dynamic value) {
+      instance.setField(field, DateTime.parse(value));
     };
   }
 
