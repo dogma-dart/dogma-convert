@@ -9,6 +9,7 @@ library dogma_data.bin.generate_static;
 // Imports
 //---------------------------------------------------------------------
 
+import 'dart:io';
 import 'package:dogma_data/src/codegen/library_generator.dart';
 
 import 'utils.dart';
@@ -17,121 +18,34 @@ import 'utils.dart';
 // Application entry point
 //---------------------------------------------------------------------
 
-// \TODO Currently just running sources manually
-
-const _sources = const {
-  '/simple_test_model.dart': '''
-library dogma_data.test.simple_test_model;
-class SimpleTestModel {
-  int testInt;
-  double testDouble;
-  num testNumInt;
-  num testNumDouble;
-  String testString;
-  List<int> testIntList;
-}
-''',
-  '/simple_test_model_annotated.dart': '''
-library dogma_data.test.simple_test_model_annotated;
-import 'package:dogma_data/common.dart';
-
-class Foo {
-  int testing;
-
-  static Foo testingThisForRealz(dynamic value);
-}
-
-Foo testingThis(dynamic value) {
-  var instance = new Foo();
-
-  instance.testing = 42;
-
-  return instance;
-}
-
-class SimpleTestModelAnnotated {
-  @SerializationProperty('test_int')
-  int testInt;
-  @SerializationProperty('test_double')
-  double testDouble;
-  @SerializationProperty('test_num_int')
-  num testNumInt;
-  @SerializationProperty('test_num_double')
-  num testNumDouble;
-  @SerializationProperty('test_string')
-  String testString;
-  @SerializationProperty('test_int_list', encode: true)
-  List<int> testIntList;
-  @SerializationFieldDecoder(#testingThis)
-  Foo foo;
-}
-''',
-  '/customer_database.dart': '''
-library dogma_data.test.models.customer_database;
-
-import 'package:dogma_data/common.dart';
-
-class Address {
-  @SerializationProperty('address_line')
-  String address;
-  @SerializationProperty('additional_address')
-  String additionalAddress = '';
-  @SerializationProperty('city')
-  String city;
-  @SerializationProperty('state')
-  States state;
-  @SerializationProperty('zip_code')
-  int zipCode;
-}
-
-class Customer {
-  @SerializationProperty('name')
-  String name;
-  @SerializationProperty('address')
-  Address address;
-  @SerializationProperty('phone_number')
-  String phoneNumber;
-}
-
-class CustomerDatabase {
-  List<Customer> customers = [];
-}
-
-enum States {
-  Texas,
-  NewMexico
-}
-'''
-};
-
+// Test files
+List<String> testFiles = [
+  "../test/models/credit_card.dart",
+  "../test/models/customer_database.dart",
+  "../test/models/simple_test_model.dart",
+  "../test/models/simple_test_model_annotated.dart"
+];
 
 void main() {
-  var context = initAnalyzer(_sources);
-
-  var buffer;
+  var sourceMap = new Map<String, String>();
+  var buffer = new StringBuffer();
   var generator;
 
-  // Write out the simple model
-  buffer = new StringBuffer();
+  // Read in all test model files
+  for(var file in testFiles) {
+    sourceMap[file] = new File(file).readAsStringSync();
+  }
 
-  generator = new LibraryGenerator(context.libraryFor('/simple_test_model.dart'));
-  generator.write(buffer);
+  // Init analyzer with test model files
+  var context = initAnalyzer(sourceMap);
 
-  print(buffer.toString());
+  // Generate static encoders/decoders
+  for(var file in testFiles) {
+    generator = new LibraryGenerator(context.libraryFor(file));
+    generator.write(buffer);
+  }
 
-  // Write out the simple annotated model
-  buffer = new StringBuffer();
-
-  generator = new LibraryGenerator(context.libraryFor('/simple_test_model_annotated.dart'));
-  generator.write(buffer);
-
-  print(buffer.toString());
-
-  // Write out the database
-  buffer = new StringBuffer();
-
-  generator = new LibraryGenerator(context.libraryFor('/customer_database.dart'));
-  generator.write(buffer);
-
+  // Print all generated output
   print(buffer.toString());
 }
+
