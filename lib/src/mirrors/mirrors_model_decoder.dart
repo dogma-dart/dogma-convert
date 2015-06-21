@@ -60,9 +60,14 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
     serializableFields.forEach((key, value) {
       var type = value.type;
       var isList = isListType(type);
+      var isMap = isMapType(type);
 
       if (isList) {
         type = type.typeArguments[0];
+      }
+
+      if (isMap) {
+        type = type.typeArguments[1];
       }
 
       var field = value.simpleName;

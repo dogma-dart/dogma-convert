@@ -80,6 +80,10 @@ bool isListType(TypeMirror mirror) {
   return simpleName == #List;
 }
 
+bool isMapType(TypeMirror mirror) {
+  return mirror.simpleName == #Map;
+}
+
 //---------------------------------------------------------------------
 // LibraryMirror helpers
 //---------------------------------------------------------------------
