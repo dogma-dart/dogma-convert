@@ -24,39 +24,52 @@ Currently the Dogma Data library is in a pre-release state and should be install
 ## Concepts
 Dogma Data acts externally on Plain Old Dart Objects to perform the decoding and encoding. This is done through ModelDecoder and ModelEncoder instances. This separates the concerns of serialization from the model itself. A ModelDecoder or ModelEncoder cannot be instantiated directly, instead they are created through the ModelDecoders and ModelEncoders interface which provides instances of the decoders or encoders for a given library.
 
-A simple example of obtaining a type's decoder and encoder follows. 
+A simple example of obtaining a type's decoder and encoder follows.  
 
+    library main;
+    
     // Import the mirrors implementation
     import 'package:dogma_data/mirrors.dart';
-    // Implement the library containing the models
-    import 'models.dart';
+    import 'package:dogma_data/common.dart';
+    
+    class Person {
+      String name;
+    }
     
     void main() {
       // Signals that the mirrors implementation should be used
       useMirrors();
-      
+    
       // Get the ModelDecoders for the library.
       // This will get decoders for all models declared in the #models library
-      var decoders = getDecoders(#models);
-      
+      var decoders = getDecoders(#main);
+    
       // Get the ModelDecoder for the given type.
       // By convention this is the class name converted to camel-case
       // A cast is used to ensure that analysis occurs as the ModelDecoders class is a proxy object
       var decoder = decoders.person as ModelDecoder<Person>;
-      
+    
       // Convert the Map data into a Person object
       var person = decoder.convert({ 'name': 'Jane Doe' });
-      
+    
       // Model data can be reused by passing it into the convert method
       // This can be used to reduce the amount of garbage created when decoding models
       person = decoder.convert({ 'name': 'Joey Joe Joe Shabidu' }, person);
-      
+    
+      // Print decoded object
+      print('Json decoded: ${person}');
+    
       // Get the ModelEncoders for the library
       // This follows the same guidelines as the deserialization path
-      var encoders = getEncoders(#models);
+      var encoders = getEncoders(#main);
       var encoder = encoders.person as ModelEncoder<Person>;
       var encoded = encoder.convert(person);
+    
+      // Print encoded object
+      print('Json encoded: ${encoded}');
     }
+    
+In this example the class Person is declared in the same library as the main function to provide a simple example that runs out of the box in a single file. However it's recommended to implement models in seperate libraries and then use getDecoders/getEncoders, eg. getDecoders(#models).
     
 ## Model Requirements
 Dogma Data places restrictions on the type of data it can encode and decode. This is to limit the problem space; keeping the complexity of the serialization logic in check.
