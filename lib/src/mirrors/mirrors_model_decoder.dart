@@ -77,6 +77,8 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
         decoder = _builtinWrapper(field);
       } else if (type.simpleName == #DateTime) {
         decoder = _dateTimeWrapper(field);
+      } else if (type.simpleName == #Duration) {
+        decoder = _durationWrapper(field);
       } else {
         assert(type is ClassMirror);
 
@@ -145,6 +147,12 @@ class MirrorsModelDecoder<Model> extends Converter<Map, Model> implements ModelD
   static _DecodeFunction _dateTimeWrapper(Symbol field) {
     return (InstanceMirror instance, dynamic value) {
       instance.setField(field, DateTime.parse(value));
+    };
+  }
+
+  static _DecodeFunction _durationWrapper(Symbol field) {
+    return (InstanceMirror instance, int value) {
+      instance.setField(field, new Duration(microseconds: value));
     };
   }
 
