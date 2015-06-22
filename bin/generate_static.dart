@@ -20,10 +20,10 @@ import 'utils.dart';
 
 // Test files
 List<String> testFiles = [
-  "../test/models/credit_card.dart",
-  "../test/models/customer_database.dart",
-  "../test/models/simple_test_model.dart",
-  "../test/models/simple_test_model_annotated.dart"
+  '../test/models/credit_card.dart',
+  '../test/models/customer_database.dart',
+  '../test/models/simple_test_model.dart',
+  '../test/models/simple_test_model_annotated.dart'
 ];
 
 void main() {
@@ -32,7 +32,7 @@ void main() {
   var generator;
 
   // Read in all test model files
-  for(var file in testFiles) {
+  for (var file in testFiles) {
     sourceMap[file] = new File(file).readAsStringSync();
   }
 
@@ -40,7 +40,7 @@ void main() {
   var context = initAnalyzer(sourceMap);
 
   // Generate static encoders/decoders
-  for(var file in testFiles) {
+  for (var file in testFiles) {
     generator = new LibraryGenerator(context.libraryFor(file));
     generator.write(buffer);
   }
