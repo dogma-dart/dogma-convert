@@ -3,8 +3,8 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains the [CompositeModelDecoder] class.
-library dogma_data.src.common.composite_model_decoder;
+/// Contains the [CompositeModelEncoder] class.
+library dogma_data.src.data.composite_model_encoder;
 
 //---------------------------------------------------------------------
 // Standard libraries
@@ -16,49 +16,44 @@ import 'dart:convert';
 // Imports
 //---------------------------------------------------------------------
 
-import 'model_decoder.dart';
+import 'model_encoder.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
-/// The [CompositeModelDecoder] combines a group of [ModelDecoder]s into a single [ModelDecoder].
+/// The [CompositeModelEncoder] combines a group of [ModelEncoder]s into a single [ModelEncoder].
 ///
-/// A [CompositeModelDecoder] invokes the individual [ModelDecoder]s on a
-/// single data input. It is used when multiple [ModelDecoder]s are required to
-/// serialize the data into a single model instance.
-class CompositeModelDecoder<Model> extends Converter<Map, Model> implements ModelDecoder<Model> {
+/// A [CompositeModelEncoder] invokes the individual [ModelEncoder]s on a
+/// single data input. It is used when multiple [ModelEncoder]s are required to
+/// deserialize a model into a map representation.
+class CompositeModelEncoder<Model> extends Converter<Model, Map> implements ModelEncoder<Model> {
   //---------------------------------------------------------------------
   // Member variables
   //---------------------------------------------------------------------
 
-  /// The [ModelDecoder]s to combine.
-  final List<ModelDecoder<Model>> decoders;
+  /// The [ModelEncoder]s to combine.
+  final List<ModelEncoder<Model>> encoders;
 
   //---------------------------------------------------------------------
   // Construction
   //---------------------------------------------------------------------
 
-  /// Creates an instance of the [CompositeModelDecoder] class with the given [decoders].
-  CompositeModelDecoder(this.decoders);
+  /// Creates an instance of the [CompositeModelEncoder] class with the given [encoders].
+  CompositeModelEncoder(this.encoders);
 
   //---------------------------------------------------------------------
-  // ModelDecoder
+  // ModelEncoder
   //---------------------------------------------------------------------
 
   @override
-  Model create() => decoders[0].create();
+  Map convert(Model input) {
+    var values = {};
 
-  @override
-  Model convert(Map input, [Model model]) {
-    if (model == null) {
-      model = create();
+    for (var encoder in encoders) {
+      values.addAll(encoder.convert(input));
     }
 
-    for (var decoder in decoders) {
-      model = decoder.convert(input, model);
-    }
-
-    return model;
+    return values;
   }
 }

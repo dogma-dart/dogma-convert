@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains the [ModelDecoders] interface.
-library dogma_data.src.common.model_decoders;
+library dogma_data.src.data.model_decoders;
 
 //---------------------------------------------------------------------
 // Library contents

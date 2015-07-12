@@ -6,15 +6,12 @@
 library dogma_data;
 
 //---------------------------------------------------------------------
-// Library contents
+// Exports
 //---------------------------------------------------------------------
 
-export 'package:dogma_data/common.dart' show CompositeModelDecoder,
-                                             CompositeModelEncoder,
-                                             ModelDecoder,
-                                             ModelEncoder,
-                                             SerializationFieldDecoder,
-                                             SerializationProperty,
-                                             SerializationValues,
-                                             getDecoders,
-                                             getEncoders;
+export 'src/data/composite_model_decoder.dart';
+export 'src/data/composite_model_encoder.dart';
+export 'src/data/model_decoder.dart';
+export 'src/data/model_decoders.dart';
+export 'src/data/model_encoder.dart';
+export 'src/data/model_encoders.dart';
