@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains the [Serialize] annotation.
-library dogma_data.src.model.serialize;
+library dogma_data.serialize;
 
 // \TODO Use union types
 

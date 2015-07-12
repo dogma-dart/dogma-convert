@@ -2,8 +2,9 @@ name: dogma_data
 version: 0.0.1
 description: Data serialization for Dart.
 dependencies:
-  analyzer: any
-  code_transformers: any
+  analyzer: 0.25.1-alpha.4
+  args: any
+  cli_util: any
 dev_dependencies:
   coverage: any
   test: any
