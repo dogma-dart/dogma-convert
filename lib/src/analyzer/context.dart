@@ -45,6 +45,7 @@ AnalysisContext analysisContext(String projectPath, String sdkPath) {
   // Set the analysis options
   var options = new AnalysisOptionsImpl()
       ..cacheSize = 256
+      ..preserveComments = true
       ..analyzeFunctionBodies = false;
 
   // Return the context

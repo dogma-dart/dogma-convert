@@ -11,6 +11,7 @@ library dogma_data.src.metadata.field_metadata;
 //---------------------------------------------------------------------
 
 import 'metadata.dart';
+import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents
@@ -18,11 +19,12 @@ import 'metadata.dart';
 
 /// Contains metadata for a library using Dogma Data for serialization.
 class FieldMetadata extends Metadata {
+  final TypeMetadata type;
   /// Whether the field should be decoded.
   final bool decode;
   /// Whether the field should be encoded.
   final bool encode;
 
-  FieldMetadata(String name, this.decode, this.encode, {dynamic data})
+  FieldMetadata(String name, this.type, this.decode, this.encode, {dynamic data})
       : super(name, data);
 }

@@ -22,6 +22,7 @@ import 'package:dogma_data/src/metadata/field_metadata.dart';
 import 'package:dogma_data/src/metadata/function_metadata.dart';
 import 'package:dogma_data/src/metadata/library_metadata.dart';
 import 'package:dogma_data/src/metadata/model_metadata.dart';
+import 'package:dogma_data/src/metadata/type_metadata.dart';
 
 import 'annotation.dart';
 import 'utils.dart';
@@ -141,7 +142,8 @@ ModelMetadata modelMetadata(ClassElement element) {
 
       // Add the field if serializable
       if ((decode) || (encode)) {
-        fields.add(new FieldMetadata(field.name, decode, encode, data: field));
+        var type = typeMetadata(field.type);
+        fields.add(new FieldMetadata(field.name, type, decode, encode, data: field));
       }
     }
   }
@@ -157,6 +159,18 @@ bool _isSerializableField(FieldElement element) {
       !element.isStatic &&
       !element.isFinal &&
       !element.isConst;
+}
+
+TypeMetadata typeMetadata(DartType type) {
+  var arguments = [];
+
+  if (type is InterfaceType) {
+    for (var argument in type.typeArguments) {
+      arguments.add(typeMetadata(argument));
+    }
+  }
+
+  return new TypeMetadata(type.name, arguments: arguments);
 }
 
 EnumMetadata enumMetadata(ClassElement element) {
