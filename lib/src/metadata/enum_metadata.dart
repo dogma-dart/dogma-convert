@@ -24,9 +24,7 @@ class EnumMetadata extends Metadata {
   final List<String> encoded;
 
   factory EnumMetadata(String name, List<String> values, {List<String> encoded, dynamic data}) {
-    if (encoded == null) {
-      encoded = new List<String>.from(values);
-    }
+    encoded ??= new List<String>.from(values);
 
     return new EnumMetadata._internal(name, values, encoded, data: data);
   }

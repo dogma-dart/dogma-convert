@@ -10,60 +10,85 @@ library dogma_data.src.codegen.model_converter_generator;
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:analyzer/analyzer.dart';
-import 'package:analyzer/src/generated/element.dart';
-
-import 'codegen_helpers.dart';
+import 'package:dogma_data/src/metadata/field_metadata.dart';
+import 'package:dogma_data/src/metadata/model_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
-/// Base class for the conversion generators.
-abstract class ModelConverterGenerator {
-  //---------------------------------------------------------------------
-  // Member variables
-  //---------------------------------------------------------------------
+/// Writes out the class definition for a model decoder using the model's [metadata].
+String generateModelDecoder(ModelMetadata metadata) {
+  // Get the decodable fields
+  var builtinDecodableFields = new List<FieldMetadata>();
+  var modelDecodableFields = new List<FieldMetadata>();
 
-  /// The class element being targeted.
-  final ClassElement element;
-  /// The declaration of the class element.
-  final ClassDeclaration declaration;
-
-  /// The serializable fields.
-  final Map<String, FieldElement> serializableFields = new Map<String, FieldElement>();
-
-  /// The dependencies for the generator.
-  ///
-  ///
-  final Set<DartType> dependencies = new Set<DartType>();
-
-  ModelConverterGenerator(this.element, this.declaration) {
-    _populate();
+  for (var field in metadata.fields) {
+    if (field.decode) {
+      if (field.type.isBuiltin) {
+        builtinDecodableFields.add(field);
+      } else {
+        modelDecodableFields.add(field);
+      }
+    }
   }
 
-  /// Generates the source code for the converter and writes it to the [buffer].
-  void write(StringBuffer buffer);
-
-  void _populate() {
-    // Get the serializable fields
-    var fields = (hasSerializationAnnotations(element))
-        ? getAnnotatedSerializableFields(element, declaration, true)
-        : getSerializableFields(element);
-
-    serializableFields.addAll(fields);
-
-    // Get the dependencies for the decoder
-    serializableFields.forEach((key, value) {
-      var check = value.type;
-
-      if (isListType(check)) {
-        check = check.typeArguments[0];
-      }
-
-      if (!isBuiltinType(check)) {
-        dependencies.add(check);
-      }
-    });
+  if (builtinDecodableFields.isEmpty) {
+    return '';
   }
+
+  // Get the names
+  var buffer = new StringBuffer();
+  var modelName = metadata.name;
+  var name = modelName + 'Decoder';
+
+  // Write the class declaration
+  buffer.writeln('class $name extends Converter<Map, $modelName> implements ModelDecoder<$modelName> {');
+
+  // Write the create function
+  buffer.writeln('$modelName create() => new $modelName();\n');
+
+  // Write the convert function
+  buffer.writeln('$modelName convert(Map input, [$modelName model = null]) {');
+  buffer.writeln('model ??= create();\n');
+
+  // Write the builtin fields
+  for (var field in builtinDecodableFields) {
+    buffer.writeln('model.${field.name} = input[\'${field.name}\'];');
+  }
+
+  buffer.writeln();
+
+  // Write the model fields
+  for (var field in modelDecodableFields) {
+    var fieldIdentifier = 'model.${field.name}';
+    buffer.writeln('$fieldIdentifier = _modelDecoder.convert(input, $fieldIdentifier)');
+  }
+
+  buffer.writeln('return model;');
+  buffer.writeln('}');
+
+  buffer.writeln('}');
+
+  return buffer.toString();
+}
+
+String generateModelEncoder(ModelMetadata metadata) {
+  // Get the names
+  var buffer = new StringBuffer();
+  var modelName = metadata.name;
+  var name = modelName + 'Encoder';
+
+  // Write the class declaration
+  buffer.writeln('class $name extends Converter<$modelName, Map> implements ModelEncoder<$modelName> {');
+
+  // Write the convert function
+  buffer.writeln('Map convert($modelName input) {');
+  buffer.writeln('output = {};');
+  buffer.writeln('return output;');
+  buffer.writeln('}');
+
+  buffer.writeln('}');
+
+  return buffer.toString();
 }

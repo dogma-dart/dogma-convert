@@ -63,9 +63,7 @@ LibraryMetadata _libraryMetadata(LibraryElement library) {
   var decodeFunctions = [];
 
   for (var unit in library.units) {
-    print('\nClasses');
     for (var type in unit.types) {
-      print(type.name);
       var metadata = modelMetadata(type);
 
       if (metadata != null) {
@@ -73,14 +71,11 @@ LibraryMetadata _libraryMetadata(LibraryElement library) {
       }
     }
 
-    print('\nFunctions');
     for (var function in unit.functions) {
       print(function.name);
     }
 
-    print('\nEnums');
     for (var enumeration in unit.enums) {
-      print(enumeration.name);
       var metadata = enumMetadata(enumeration);
 
       if (metadata != null) {

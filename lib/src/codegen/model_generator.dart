@@ -3,7 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_data.src.codegen.unmodifiable_model_view_generator;
+library dogma_data.src.codegen.model_generator;
 
 //---------------------------------------------------------------------
 // Imports
@@ -45,6 +45,9 @@ String generateUnmodifiableModelView(ModelMetadata metadata) {
   var name = metadata.name;
   var unmodifiableName = 'Unmodifiable${name}View';
 
+  // Write out the class comment
+  buffer.writeln('/// An unmodifiable view over an instance of [$name].');
+
   // Write the class declaration
   buffer.writeln('class $unmodifiableName implements $name {');
 
@@ -75,6 +78,8 @@ String generateUnmodifiableModelView(ModelMetadata metadata) {
 
   var unmodifiableFieldCount = unmodifiableFields.length;
 
+  buffer.writeln();
+
   // Write the constructor
   if (unmodifiableFieldCount > 0) {
     // Write out a factor constructor to handle creating unmodifiable views
@@ -94,7 +99,7 @@ String generateUnmodifiableModelView(ModelMetadata metadata) {
     }
 
     buffer.writeln(');');
-    buffer.writeln('}');
+    buffer.writeln('}\n');
 
     // Write out the internal constructor
     buffer.write('$unmodifiableName.$_internalConstructorName(');
@@ -115,6 +120,7 @@ String generateUnmodifiableModelView(ModelMetadata metadata) {
     var type = typeName(field.type);
     var fieldName = field.name;
 
+    buffer.writeln();
     buffer.writeln('@override');
     buffer.writeln('$type get $fieldName => $_modelFieldName.$fieldName;');
     buffer.writeln('set $fieldName($type value) { throw new UnsupportedError(\'Cannot modify an unmodifiable $name\'); }');
@@ -124,6 +130,7 @@ String generateUnmodifiableModelView(ModelMetadata metadata) {
     var type = typeName(field.type);
     var fieldName = field.name;
 
+    buffer.writeln();
     buffer.writeln('@override');
     buffer.writeln('$type get $fieldName => _$fieldName;');
     buffer.writeln('set $fieldName($type value) { throw new UnsupportedError(\'Cannot modify an unmodifiable $name\'); }');

@@ -69,7 +69,7 @@ A simple example of obtaining a type's decoder and encoder follows.
       print('Json encoded: ${encoded}');
     }
     
-In this example the class Person is declared in the same library as the main function to provide a simple example that runs out of the box in a single file. However it's recommended to implement models in seperate libraries and then use getDecoders/getEncoders, eg. getDecoders(#models).
+In this example the class Person is declared in the same library as the main function to provide a simple example that runs out of the box in a single file. However it's recommended to implement models in separate libraries and then use getDecoders/getEncoders, eg. getDecoders(#models).
     
 ## Model Requirements
 Dogma Data places restrictions on the type of data it can encode and decode. This is to limit the problem space; keeping the complexity of the serialization logic in check.

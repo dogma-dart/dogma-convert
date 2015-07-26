@@ -21,9 +21,7 @@ class TypeMetadata extends Metadata {
   final List<TypeMetadata> arguments;
 
   factory TypeMetadata(String name, {List<TypeMetadata> arguments, dynamic data}) {
-    if (arguments == null) {
-      arguments = [];
-    }
+    arguments ??= [];
 
     return new TypeMetadata._internal(name, arguments, data: data);
   }
@@ -40,7 +38,7 @@ class TypeMetadata extends Metadata {
   /// Whether the type is a double.
   bool get isDouble => name == 'double';
   /// Whether the type is a number.
-  bool get isNum => isInt || isDouble;
+  bool get isNum => isInt || isDouble || name == 'num';
   /// Whether the type is a boolean.
   bool get isBool => name == 'bool';
   /// Whether the type is a string.
