@@ -30,6 +30,10 @@ const String _internalConstructorName = '_internal';
 /// The name of the variable used in the factory constructor.
 const String _factoryVariableName = 'model';
 
+String generateModel(ModelMetadata metadata) {
+  return '';
+}
+
 /// Writes out the class definition for an unmodifiable view over the model using its [metadata].
 ///
 /// The generated class definition implements the model but prevents

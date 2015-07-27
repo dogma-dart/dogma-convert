@@ -10,8 +10,7 @@
 - Implicit (de)serialization of PODOs based on coding conventions.
 - Explicit (de)serialization of PODOs using metadata annotations.
 - Fully customizable (de)serialization behavior.
-- Mirrors based implementation for fast iteration during development.
-- Code generation to remove dependencies on mirrors.
+- Support for immutable views over models.
 
 ## Installation
 Currently the Dogma Data library is in a pre-release state and should be installed as a git dependency.
@@ -110,7 +109,7 @@ When developing a first party application it is likely that implicit serializati
 ## Explicit (De)Serialization
 Sometimes implicit serialization does not contain the required behavior from the decoder and/or encoder. This is somewhat likely to occur when accessing a third party API. To provide more control over the serialization process the Dogma Data library allows explicit serialization options.
 
-### SerializationProperty
+### Serialize
 A SerializationProperty is an annotation which maps a key to the member variable. This is useful if the key within the map data does not correspond to the name within the model.
 
 The following shows a model where the SerializationProperty is used.

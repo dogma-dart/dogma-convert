@@ -35,24 +35,44 @@ LibraryMetadata libraryMetadata(String path, AnalysisContext context) {
   var source = new FileBasedSource(new JavaFile(path));
 
   return context.computeKindOf(source) == SourceKind.LIBRARY
-      ? _libraryMetadata(context.computeLibraryElement(source))
+      ? _libraryMetadata(context.computeLibraryElement(source), {})
       : null;
 }
 
-LibraryMetadata _libraryMetadata(LibraryElement library) {
+bool _shouldLoadLibraryMetadata(LibraryElement library) {
+  var scheme = library.definingCompilationUnit.source.uri.scheme;
+
+  return scheme != 'dart' && scheme != 'package';
+}
+
+LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMetadata> cached) {
+  var name = library.name;
+
+  if (cached.containsKey(name)) {
+    return cached[name];
+  }
+
   var containsModels = false;
   var importedLibraries = [];
   var exportedLibraries = [];
 
+  print(library.definingCompilationUnit.source.fullName);
+
   // Look at the dependencies for metadata
   print('\nImports');
   for (var imported in library.importedLibraries) {
-    print(imported.name);
+    if (_shouldLoadLibraryMetadata(imported)) {
+      print(imported.name);
+      importedLibraries.add(_libraryMetadata(imported, cached));
+    }
   }
 
   print('\nExports');
   for (var exported in library.exportedLibraries) {
-    print(exported.name);
+    if (_shouldLoadLibraryMetadata(exported)) {
+      print(exported.name);
+      exportedLibraries.add(_libraryMetadata(exported, cached));
+    }
   }
 
   var models = [];
@@ -99,14 +119,22 @@ LibraryMetadata _libraryMetadata(LibraryElement library) {
       encodeFunctions.length +
       decodeFunctions.length;
 
-  return metadataCount > 0
-      ? new LibraryMetadata(library.name,
-          imported: importedLibraries,
-          exported: exportedLibraries,
-          models: models,
-          enumerations: enumerations,
-          data: library)
-      : null;
+  if (metadataCount > 0) {
+    var metadata = new LibraryMetadata(
+        name,
+        imported: importedLibraries,
+        exported: exportedLibraries,
+        models: models,
+        enumerations: enumerations,
+        data: library
+    );
+
+    cached[name] = metadata;
+
+    return metadata;
+  } else {
+    return null;
+  }
 }
 
 ModelMetadata modelMetadata(ClassElement element) {

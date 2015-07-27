@@ -46,9 +46,11 @@ String generateModelDecoder(ModelMetadata metadata) {
   buffer.writeln('class $name extends Converter<Map, $modelName> implements ModelDecoder<$modelName> {');
 
   // Write the create function
+  buffer.writeln('@override');
   buffer.writeln('$modelName create() => new $modelName();\n');
 
   // Write the convert function
+  buffer.writeln('@override');
   buffer.writeln('$modelName convert(Map input, [$modelName model = null]) {');
   buffer.writeln('model ??= create();\n');
 
@@ -83,8 +85,9 @@ String generateModelEncoder(ModelMetadata metadata) {
   buffer.writeln('class $name extends Converter<$modelName, Map> implements ModelEncoder<$modelName> {');
 
   // Write the convert function
+  buffer.writeln('@override');
   buffer.writeln('Map convert($modelName input) {');
-  buffer.writeln('output = {};');
+  buffer.writeln('var output = {};');
   buffer.writeln('return output;');
   buffer.writeln('}');
 
