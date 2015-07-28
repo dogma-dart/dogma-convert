@@ -64,7 +64,7 @@ String generateModelDecoder(ModelMetadata metadata) {
   // Write the model fields
   for (var field in modelDecodableFields) {
     var fieldIdentifier = 'model.${field.name}';
-    buffer.writeln('$fieldIdentifier = _modelDecoder.convert(input, $fieldIdentifier)');
+    buffer.writeln('$fieldIdentifier = _modelDecoder.convert(input, $fieldIdentifier);');
   }
 
   buffer.writeln('return model;');

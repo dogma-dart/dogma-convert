@@ -20,6 +20,7 @@ import 'model_metadata.dart';
 
 /// Contains metadata for a library using Dogma Data for serialization.
 class LibraryMetadata extends Metadata {
+  final String filename;
   final List<LibraryMetadata> imported;
   final List<LibraryMetadata> exported;
 
@@ -27,6 +28,7 @@ class LibraryMetadata extends Metadata {
   final List<EnumMetadata> enumerations;
 
   LibraryMetadata(String name,
+                  this.filename,
                  {dynamic data,
                   this.imported,
                   this.exported,

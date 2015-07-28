@@ -56,8 +56,6 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
   var importedLibraries = [];
   var exportedLibraries = [];
 
-  print(library.definingCompilationUnit.source.fullName);
-
   // Look at the dependencies for metadata
   print('\nImports');
   for (var imported in library.importedLibraries) {
@@ -122,6 +120,7 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
   if (metadataCount > 0) {
     var metadata = new LibraryMetadata(
         name,
+        library.definingCompilationUnit.name,
         imported: importedLibraries,
         exported: exportedLibraries,
         models: models,
