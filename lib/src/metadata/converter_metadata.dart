@@ -11,16 +11,38 @@ library dogma_data.src.metadata.converter_metadata;
 //---------------------------------------------------------------------
 
 import 'metadata.dart';
+import 'type_metadata.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
+/// Contains metadata for a converter.
 class ConverterMetadata extends Metadata {
+  //---------------------------------------------------------------------
+  // Member variables
+  //---------------------------------------------------------------------
+
+  /// The type that can be converted.
+  final TypeMetadata type;
   /// Whether the converter handles decoding.
   final bool decoder;
-  ConverterMetadata(String name, this.decoder, {dynamic data})
-      : super(name, data);
 
+  //---------------------------------------------------------------------
+  // Construction
+  //---------------------------------------------------------------------
+
+  /// Creates an instance of [ConverterMetadata] for the given [type].
+  ///
+  /// Whehter or not the coverter will handle decoding is specified in
+  /// [decoder].
+  ConverterMetadata(String name, this.type, this.decoder)
+      : super(name);
+
+  //---------------------------------------------------------------------
+  // Properties
+  //---------------------------------------------------------------------
+
+  /// Whether the converter handles encoding.
   bool get encoder => !decoder;
 }

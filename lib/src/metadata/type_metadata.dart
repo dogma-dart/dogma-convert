@@ -16,18 +16,34 @@ import 'metadata.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+/// Contains metadata for a type.
 ///
+/// Information such as interfaces, base class, and mixin is not present in the
+/// metadata as Dogma data only handles Plain Old Dart Objects which do not
+/// have inheritance.
 class TypeMetadata extends Metadata {
+  /// The type arguments.
+  ///
+  /// This is only present on generic types.
   final List<TypeMetadata> arguments;
 
-  factory TypeMetadata(String name, {List<TypeMetadata> arguments, dynamic data}) {
+  //---------------------------------------------------------------------
+  // Construction
+  //---------------------------------------------------------------------
+
+  /// Creates an instance of [TypeMetadata] with the given name.
+  ///
+  /// If the type is generic then [arguments] should be used to fully type the
+  /// metadata.
+  factory TypeMetadata(String name, {List<TypeMetadata> arguments}) {
     arguments ??= [];
 
-    return new TypeMetadata._internal(name, arguments, data: data);
+    return new TypeMetadata._internal(name, arguments);
   }
 
-  TypeMetadata._internal(String name, this.arguments, {dynamic data})
-      : super(name, data);
+  /// Creates an instance of [TypeMetadata].
+  TypeMetadata._internal(String name, this.arguments)
+      : super(name);
 
   //---------------------------------------------------------------------
   // Properties
@@ -49,6 +65,10 @@ class TypeMetadata extends Metadata {
   bool get isMap => name == 'Map';
 
   /// Whether the type is built in.
+  ///
+  /// Builtin refers to the base types present in dart:core that can be
+  /// (de)serialized directly in a JSON payload without conversion. This is
+  /// done recursively for generic types.
   bool get isBuiltin {
     var value;
 

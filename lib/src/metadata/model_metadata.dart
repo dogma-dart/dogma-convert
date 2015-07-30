@@ -19,7 +19,25 @@ import 'field_metadata.dart';
 
 ///
 class ModelMetadata extends Metadata {
+  /// The fields present on the model.
   final List<FieldMetadata> fields;
-  ModelMetadata(String name, this.fields, {dynamic data})
-      : super(name, data);
+
+  ModelMetadata(String name, this.fields)
+      : super(name);
+
+  Iterable<FieldMetadata> get encodableFields sync* {
+    for (var field in fields) {
+      if (field.encode) {
+        yield field;
+      }
+    }
+  }
+
+  Iterable<FieldMetadata> get decodableFields sync* {
+    for (var field in fields) {
+      if (field.decode) {
+        yield field;
+      }
+    }
+  }
 }

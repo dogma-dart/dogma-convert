@@ -16,19 +16,36 @@ import 'metadata.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-/// Contains metadata for a library using Dogma Data for serialization.
+/// Contains metadata for an enumeration.
+///
+/// The enumeration metadata contains the names of the [values] as well as an
+/// [encoded] variant for serialization.
 class EnumMetadata extends Metadata {
+  //---------------------------------------------------------------------
+  // Member variables
+  //---------------------------------------------------------------------
+
   /// The name of the individual enumerations.
   final List<String> values;
   /// The encoded values.
   final List<String> encoded;
 
-  factory EnumMetadata(String name, List<String> values, {List<String> encoded, dynamic data}) {
+  //---------------------------------------------------------------------
+  // Construction
+  //---------------------------------------------------------------------
+
+  /// Creates an instance of [EnumMetadata] with the given [name] and [values].
+  ///
+  /// If there is a specific encoding for the values then [encoded] should be
+  /// provided, otherwise the individual [values] will be used as the
+  /// serialized names.
+  factory EnumMetadata(String name, List<String> values, {List<String> encoded}) {
     encoded ??= new List<String>.from(values);
 
-    return new EnumMetadata._internal(name, values, encoded, data: data);
+    return new EnumMetadata._internal(name, values, encoded);
   }
 
-  EnumMetadata._internal(String name, this.values, this.encoded, {dynamic data})
-      : super(name, data);
+  /// Creates an instance of [EnumMetadata].
+  EnumMetadata._internal(String name, this.values, this.encoded)
+      : super(name);
 }

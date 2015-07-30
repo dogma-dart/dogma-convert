@@ -14,12 +14,7 @@ library dogma_data.src.metadata.metadata;
 class Metadata {
   /// The name associated with this metadata.
   final String name;
-  /// The internal data used to populate the metadata.
-  ///
-  /// This field contains optional data that the implementation could choose to
-  /// expose.
-  final dynamic data;
 
   /// Creates an instance of the [Metadata] class with the given [name].
-  Metadata(this.name, this.data);
+  Metadata(this.name);
 }

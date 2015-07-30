@@ -52,29 +52,26 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
     return cached[name];
   }
 
-  var containsModels = false;
   var importedLibraries = [];
   var exportedLibraries = [];
 
   // Look at the dependencies for metadata
-  print('\nImports');
   for (var imported in library.importedLibraries) {
     if (_shouldLoadLibraryMetadata(imported)) {
-      print(imported.name);
       importedLibraries.add(_libraryMetadata(imported, cached));
     }
   }
 
-  print('\nExports');
   for (var exported in library.exportedLibraries) {
     if (_shouldLoadLibraryMetadata(exported)) {
-      print(exported.name);
       exportedLibraries.add(_libraryMetadata(exported, cached));
     }
   }
 
   var models = [];
   var enumerations = [];
+  var converters = [];
+  var functions = [];
   var modelEncoders = [];
   var modelDecoders = [];
   var encodeFunctions = [];
@@ -86,11 +83,21 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
 
       if (metadata != null) {
         models.add(metadata);
+      } else {
+        metadata = converterMetadata(type);
+
+        if (metadata != null) {
+          converters.add(metadata);
+        }
       }
     }
 
     for (var function in unit.functions) {
-      print(function.name);
+      var metadata = functionMetadata(function);
+
+      if (metadata != null) {
+        functions.add(metadata);
+      }
     }
 
     for (var enumeration in unit.enums) {
@@ -112,6 +119,8 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
       exportedLibraries.length +
       models.length +
       enumerations.length +
+      converters.length +
+      functions.length +
       modelEncoders.length +
       modelDecoders.length +
       encodeFunctions.length +
@@ -125,7 +134,8 @@ LibraryMetadata _libraryMetadata(LibraryElement library, Map<String, LibraryMeta
         exported: exportedLibraries,
         models: models,
         enumerations: enumerations,
-        data: library
+        converters: converters,
+        functions: functions
     );
 
     cached[name] = metadata;
@@ -145,10 +155,11 @@ ModelMetadata modelMetadata(ClassElement element) {
     if (_isSerializableField(field)) {
       var decode = implicit;
       var encode = implicit;
+      Serialize serialize;
 
       // Iterate over the metadata looking for annotations
       for (var metadata in field.metadata) {
-        var serialize = annotation(metadata);
+        serialize = annotation(metadata);
 
         if (serialize != null) {
           decode = serialize.decode;
@@ -159,13 +170,16 @@ ModelMetadata modelMetadata(ClassElement element) {
             fields.clear();
             implicit = false;
           }
+
+          break;
         }
       }
 
       // Add the field if serializable
       if ((decode) || (encode)) {
         var type = typeMetadata(field.type);
-        fields.add(new FieldMetadata(field.name, type, decode, encode, data: field));
+        var serializationName = serialize?.name;
+        fields.add(new FieldMetadata(field.name, type, decode, encode, serializationName: serializationName));
       }
     }
   }
@@ -226,4 +240,49 @@ EnumMetadata enumMetadata(ClassElement element) {
   }
 
   return new EnumMetadata(element.name, values, encoded: encoded);
+}
+
+ConverterMetadata converterMetadata(ClassElement element) {
+  // Iterate over the interfaces
+  for (var interface in element.interfaces) {
+    var name = interface.name;
+    var decoder = name == 'ModelDecoder';
+    var type;
+
+    if ((decoder) || (name == 'ModelEncoder')) {
+      type = typeMetadata(interface.typeArguments[0]);
+    }
+
+    if (type != null) {
+      return new ConverterMetadata(name, type, decoder);
+    }
+  }
+
+  return null;
+}
+
+FunctionMetadata functionMetadata(FunctionElement element) {
+  var parameters = element.parameters;
+
+  // See if the function is valid as an encoder or decoder
+  if (parameters.length == 1) {
+    var metadata = findAnnotation(element);
+    var decoder;
+
+    if (metadata != null) {
+      // \TODO Error check for unknown Serialize instance?
+      if (metadata == Serialize.decodeThrough) {
+        decoder = true;
+      } else if (metadata == Serialize.encodeThrough) {
+        decoder = false;
+      }
+    }
+
+    var input = typeMetadata(parameters[0].type);
+    var output = typeMetadata(element.returnType);
+
+    return new FunctionMetadata(element.name, input, output, decoder: decoder);
+  } else {
+    return null;
+  }
 }

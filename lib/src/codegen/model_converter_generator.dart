@@ -56,7 +56,7 @@ String generateModelDecoder(ModelMetadata metadata) {
 
   // Write the builtin fields
   for (var field in builtinDecodableFields) {
-    buffer.writeln('model.${field.name} = input[\'${field.name}\'];');
+    buffer.writeln('model.${field.name} = input[\'${field.serializationName}\'];');
   }
 
   buffer.writeln();
