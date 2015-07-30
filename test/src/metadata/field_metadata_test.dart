@@ -17,12 +17,13 @@ import 'package:test/test.dart';
 // Library contents
 //---------------------------------------------------------------------
 
-/// The dummy type name.
-const String _typeName = 'foo';
 /// The dummy metadata name.
 const String _metadataName = 'test';
 /// The serialization name.
 const String _serializationName = 'encode';
+
+/// Creates a dummy type.
+TypeMetadata _type() => new TypeMetadata('foo');
 
 /// Checks the [metadata] values are equivalent to [name] and [serializationName].
 void _checkValues(FieldMetadata metadata, String name, String serializationName) {
@@ -33,15 +34,13 @@ void _checkValues(FieldMetadata metadata, String name, String serializationName)
 /// Test entry point.
 void main() {
   test('Construction without explicit serialization', () {
-    var type = new TypeMetadata(_typeName);
-    var metadata = new FieldMetadata(_metadataName, type, true, true);
+    var metadata = new FieldMetadata(_metadataName, _type(), true, true);
 
     _checkValues(metadata, _metadataName, _metadataName);
   });
 
   test('Construction with explicit serialization', () {
-    var type = new TypeMetadata(_typeName);
-    var metadata = new FieldMetadata(_metadataName, type, true, true, serializationName: _serializationName);
+    var metadata = new FieldMetadata(_metadataName, _type(), true, true, serializationName: _serializationName);
 
     _checkValues(metadata, _metadataName, _serializationName);
   });

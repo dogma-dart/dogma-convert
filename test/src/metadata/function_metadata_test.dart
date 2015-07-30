@@ -3,13 +3,14 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_data.test.src.metadata.converter_metadata_test;
+/// Contains tests for the [FunctionMetadata] class.
+library dogma_data.test.src.metadata.function_metadata_test;
 
 //---------------------------------------------------------------------
 // Imports
 //---------------------------------------------------------------------
 
-import 'package:dogma_data/src/metadata/converter_metadata.dart';
+import 'package:dogma_data/src/metadata/function_metadata.dart';
 import 'package:dogma_data/src/metadata/type_metadata.dart';
 import 'package:test/test.dart';
 
@@ -27,10 +28,13 @@ void main() {
   test('Properties', () {
     var type = new TypeMetadata(_typeName);
 
-    var decoder = new ConverterMetadata(_metadataName, type, true);
-    expect(decoder.encoder, false);
+    var function = new FunctionMetadata(_metadataName, type, type);
+    expect(function.defaultConverter, false);
 
-    var encoder = new ConverterMetadata(_metadataName, type, false);
-    expect(encoder.encoder, true);
-  });
+    var encoder = new FunctionMetadata(_metadataName, type, type, decoder: true);
+    expect(encoder.defaultConverter, true);
+
+    var decoder = new FunctionMetadata(_metadataName, type, type, decoder: false);
+    expect(decoder.defaultConverter, true);
+});
 }

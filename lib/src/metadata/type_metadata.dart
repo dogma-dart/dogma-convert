@@ -74,14 +74,14 @@ class TypeMetadata extends Metadata {
 
     // Check for lists and maps as the type arguments need to be checked
     if (isList || isMap) {
+      value = true;
+
       for (var argument in arguments) {
         if (!argument.isBuiltin) {
           value = false;
           break;
         }
       }
-
-      value = true;
     } else {
       value = isNum || isBool || isString;
     }

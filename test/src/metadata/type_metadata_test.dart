@@ -3,6 +3,7 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
+/// Contains tests for the [TypeMetadata] class.
 library dogma_data.test.src.metadata.type_metadata_test;
 
 //---------------------------------------------------------------------
@@ -16,6 +17,9 @@ import 'package:test/test.dart';
 // Library contents
 //---------------------------------------------------------------------
 
+/// The maximum depth of a List or Map to create.
+const int _maxDepth = 10;
+
 /// Create a bool type.
 TypeMetadata _boolType() => new TypeMetadata('bool');
 /// Create an integer type.
@@ -26,14 +30,28 @@ TypeMetadata _doubleType() => new TypeMetadata('double');
 TypeMetadata _numType() => new TypeMetadata('num');
 /// Create a string type.
 TypeMetadata _stringType() => new TypeMetadata('String');
+/// Creates a user type.
+TypeMetadata _userType() => new TypeMetadata('Foo');
 /// Create a List type.
-TypeMetadata _listType(TypeMetadata type, [int depth = 0]) {
+TypeMetadata _listType(TypeMetadata type, [int depth = 1]) {
   var root = new TypeMetadata('List', arguments: [type]);
+
+  for (var i = 1; i < depth; ++i) {
+    root = new TypeMetadata('List', arguments: [root]);
+  }
 
   return root;
 }
-/// Creates a user type.
-TypeMetadata _userType() => new TypeMetadata('Foo');
+/// Create a Map type.
+TypeMetadata _mapType(TypeMetadata key, TypeMetadata value, [int depth = 1]) {
+  var root = new TypeMetadata('Map', arguments: [key, value]);
+
+  for (var i = 1; i < depth; ++i) {
+    root = new TypeMetadata('Map', arguments: [key, root]);
+  }
+
+  return root;
+}
 
 /// Test entry point.
 void main() {
@@ -113,5 +131,57 @@ void main() {
     expect(type.isList, false);
     expect(type.isMap, false);
     expect(type.isBuiltin, false);
+  });
+
+  test('List type', () {
+    var expectListType = (type, builtin) {
+      expect(type.isInt, false);
+      expect(type.isDouble, false);
+      expect(type.isNum, false);
+      expect(type.isBool, false);
+      expect(type.isString, false);
+      expect(type.isList, true);
+      expect(type.isMap, false);
+      expect(type.isBuiltin, builtin);
+    };
+
+    var checkListWithType = (type, maxDepth, builtin) {
+      for (var i = 1; i < maxDepth; ++i) {
+        expectListType(_listType(type, i), builtin);
+      }
+    };
+
+    checkListWithType(_boolType(), _maxDepth, true);
+    checkListWithType(_intType(), _maxDepth, true);
+    checkListWithType(_doubleType(), _maxDepth, true);
+    checkListWithType(_numType(), _maxDepth, true);
+    checkListWithType(_stringType(), _maxDepth, true);
+    checkListWithType(_userType(), _maxDepth, false);
+  });
+
+  test('Map type', () {
+    var expectMapType = (type, builtin) {
+      expect(type.isInt, false);
+      expect(type.isDouble, false);
+      expect(type.isNum, false);
+      expect(type.isBool, false);
+      expect(type.isString, false);
+      expect(type.isList, false);
+      expect(type.isMap, true);
+      expect(type.isBuiltin, builtin);
+    };
+
+    var checkMapWithType = (type, maxDepth, builtin) {
+      for (var i = 1; i < maxDepth; ++i) {
+        expectMapType(_mapType(_stringType(), type, i), builtin);
+      }
+    };
+
+    checkMapWithType(_boolType(), _maxDepth, true);
+    checkMapWithType(_intType(), _maxDepth, true);
+    checkMapWithType(_doubleType(), _maxDepth, true);
+    checkMapWithType(_numType(), _maxDepth, true);
+    checkMapWithType(_stringType(), _maxDepth, true);
+    checkMapWithType(_userType(), _maxDepth, false);
   });
 }
