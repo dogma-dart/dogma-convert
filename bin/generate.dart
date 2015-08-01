@@ -53,5 +53,5 @@ void main(List<String> args) {
     return;
   }
 
-  build([], rest[0]);
+  build([], 'test', rest[0]);
 }

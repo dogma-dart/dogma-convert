@@ -45,8 +45,8 @@ class FieldMetadata extends Metadata {
   /// name to serialize to is different than the name of field then
   /// [serializationName] should be specified.
   FieldMetadata(String name, this.type, this.decode, this.encode, {String serializationName})
-      : super(name)
-      , _serializationName = serializationName ?? '';
+      :  _serializationName = serializationName ?? ''
+      , super(name);
 
   //---------------------------------------------------------------------
   // Properties

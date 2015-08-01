@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains functions to generate metadata for codegen.
-library dogma_data.src.codegen.codegen_metadata;
+library dogma_data.src.analyzer.analyzer_metadata;
 
 //---------------------------------------------------------------------
 // Imports

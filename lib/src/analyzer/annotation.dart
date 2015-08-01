@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains functions for using the dart analyzer.
-library dogma_data.src.codegen.annotation;
+library dogma_data.src.analyzer.annotation;
 
 //---------------------------------------------------------------------
 // Imports

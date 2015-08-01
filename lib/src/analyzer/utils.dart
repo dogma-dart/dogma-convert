@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Utility functions for analysis of a project.
-library dogma_data.src.codegen.utils;
+library dogma_data.src.analyzer.utils;
 
 //---------------------------------------------------------------------
 // Imports

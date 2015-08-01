@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains functions for getting an analysis context.
-library dogma_data.src.codegen.context;
+library dogma_data.src.analyzer.context;
 
 //---------------------------------------------------------------------
 // Imports
