@@ -2,8 +2,8 @@
 
 > A serialization library for Dart.
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dogma-dart/dogma-data?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://drone.io/github.com/dogma-dart/dogma-data/status.png)](https://drone.io/github.com/dogma-dart/dogma-data/latest)
+[![Join the chat at https://gitter.im/dogma-dart/dogma-dart.github.io](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dogma-dart/dogma-dart.github.io?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](http://test.drone.io/api/badge/github.com/dogma-dart/dogma-data/status.svg?branch=master)](http://test.drone.io/github.com/dogma-dart/dogma-data)
 [![Coverage Status](https://coveralls.io/repos/dogma-dart/dogma-data/badge.svg?branch=master)](https://coveralls.io/r/dogma-dart/dogma-data?branch=master)
 
 ## Features
