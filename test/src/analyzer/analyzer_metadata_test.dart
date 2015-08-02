@@ -29,12 +29,12 @@ void main() {
   test('FunctionMetadata explicit', () {
     var metadata = libraryMetadata('test/libs/converter_functions_explicit.dart', context);
 
-    expect(metadata.imported.isEmpty, true);
-    expect(metadata.exported.isEmpty, true);
-    expect(metadata.models.isEmpty, true);
-    expect(metadata.converters.isEmpty, true);
-    expect(metadata.enumerations.isEmpty, true);
-    expect(metadata.functions.length, 2);
+    expect(metadata.imported.isEmpty, true, reason: 'No imports');
+    expect(metadata.exported.isEmpty, true, reason: 'No exports');
+    expect(metadata.models.isEmpty, true, reason: 'No models in library');
+    expect(metadata.converters.isEmpty, true, reason: 'No converters in library');
+    expect(metadata.enumerations.isEmpty, true, reason: 'No enumerations in library');
+    expect(metadata.functions.length, 2, reason: 'Two functions present');
 
     var decoder = metadata.functions.firstWhere((function) => function.name == 'decodeDuration');
     expect(decoder.decoder, true);
