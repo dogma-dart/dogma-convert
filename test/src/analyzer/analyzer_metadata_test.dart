@@ -26,15 +26,21 @@ import 'package:test/test.dart';
 void main() {
   var context = analysisContext(path.current, getSdkDir().path);
 
+  test('Empty library', () {
+    var metadata = libraryMetadata('test/libs/empty.dart', context);
+
+    expect(metadata, null);
+  });
+
   test('FunctionMetadata explicit', () {
     var metadata = libraryMetadata('test/libs/converter_functions_explicit.dart', context);
 
-    expect(metadata.imported.isEmpty, true, reason: 'No imports');
-    expect(metadata.exported.isEmpty, true, reason: 'No exports');
-    expect(metadata.models.isEmpty, true, reason: 'No models in library');
-    expect(metadata.converters.isEmpty, true, reason: 'No converters in library');
-    expect(metadata.enumerations.isEmpty, true, reason: 'No enumerations in library');
-    expect(metadata.functions.length, 2, reason: 'Two functions present');
+    expect(metadata.imported.isEmpty, true);
+    expect(metadata.exported.isEmpty, true);
+    expect(metadata.models.isEmpty, true);
+    expect(metadata.converters.isEmpty, true);
+    expect(metadata.enumerations.isEmpty, true);
+    expect(metadata.functions.length, 2);
 
     var decoder = metadata.functions.firstWhere((function) => function.name == 'decodeDuration');
     expect(decoder.decoder, true);
@@ -43,5 +49,54 @@ void main() {
     var encoder = metadata.functions.firstWhere((function) => function.name == 'encodeDuration');
     expect(encoder.decoder, false);
     expect(encoder.defaultConverter, true);
+  });
+
+  test('FunctionMetadata implicit', () {
+    var metadata = libraryMetadata('test/libs/converter_functions_implicit.dart', context);
+
+    expect(metadata.imported.isEmpty, true);
+    expect(metadata.exported.isEmpty, true);
+    expect(metadata.models.isEmpty, true);
+    expect(metadata.converters.isEmpty, true);
+    expect(metadata.enumerations.isEmpty, true);
+    expect(metadata.functions.length, 2);
+
+    var decoder = metadata.functions.firstWhere((function) => function.name == 'decodeDuration');
+    expect(decoder.decoder, null);
+    expect(decoder.defaultConverter, false);
+
+    var encoder = metadata.functions.firstWhere((function) => function.name == 'encodeDuration');
+    expect(encoder.decoder, null);
+    expect(encoder.defaultConverter, false);
+  });
+
+  test('EnumMetadata explicit', () {
+    var metadata = libraryMetadata('test/libs/enum_explicit.dart', context);
+
+    expect(metadata.imported.isEmpty, true);
+    expect(metadata.exported.isEmpty, true);
+    expect(metadata.models.isEmpty, true);
+    expect(metadata.converters.isEmpty, true);
+    expect(metadata.enumerations.length, 1);
+    expect(metadata.functions.isEmpty, true);
+
+    var enumeration = metadata.enumerations.firstWhere((value) => value.name == 'ColorExplicit');
+    expect(enumeration.values, ['red', 'green', 'blue']);
+    expect(enumeration.encoded, [0xff0000, 0xff00, 0xff]);
+  });
+
+  test('EnumMetadata implicit', () {
+    var metadata = libraryMetadata('test/libs/enum_implicit.dart', context);
+
+    expect(metadata.imported.isEmpty, true);
+    expect(metadata.exported.isEmpty, true);
+    expect(metadata.models.isEmpty, true);
+    expect(metadata.converters.isEmpty, true);
+    expect(metadata.enumerations.length, 1);
+    expect(metadata.functions.isEmpty, true);
+
+    var enumeration = metadata.enumerations.firstWhere((value) => value.name == 'ColorImplicit');
+    expect(enumeration.values, ['red', 'green', 'blue']);
+    expect(enumeration.encoded, enumeration.values);
   });
 }

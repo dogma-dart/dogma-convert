@@ -5,3 +5,9 @@
 
 library dogma_data.test.libs.converter_functions_implicit;
 
+// These functions should be picked up as potential converters
+int encodeDuration(Duration value) => value.inMilliseconds;
+Duration decodeDuration(int value) => new Duration(milliseconds: value);
+
+// These functions should not be picked up as potential converters
+bool notPresent(String value0, String value1) => value0 == value1;
