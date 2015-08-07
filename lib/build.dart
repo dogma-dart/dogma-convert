@@ -1,3 +1,7 @@
+// Copyright (c) 2015, the Dogma Project Authors.
+// Please see the AUTHORS file for details. All rights reserved.
+// Use of this source code is governed by a zlib license that can be found in
+// the LICENSE file.
 
 library dogma_data.build;
 
@@ -19,6 +23,10 @@ import 'package:dogma_data/src/analyzer/context.dart';
 import 'package:dogma_data/src/codegen/library_generator.dart';
 import 'package:dogma_data/src/metadata/library_metadata.dart';
 import 'package:path/path.dart' as path;
+
+//---------------------------------------------------------------------
+// Library contents
+//---------------------------------------------------------------------
 
 Future<Null> build(List<String> args,
                    String packageName,

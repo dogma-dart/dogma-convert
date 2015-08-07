@@ -25,6 +25,21 @@ class ModelMetadata extends Metadata {
   ModelMetadata(String name, this.fields)
       : super(name);
 
+  /// Whether the model uses explicit serialization.
+  ///
+  /// Looks for any cases where the field name differs from the serialization
+  /// name. If there are differences in any fields then the model uses explicit
+  /// serialization.
+  bool get explicitSerialization {
+    for (var field in fields) {
+      if ((field.decode || field.encode) && (field.name != field.serializationName)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   Iterable<FieldMetadata> get encodableFields sync* {
     for (var field in fields) {
       if (field.encode) {

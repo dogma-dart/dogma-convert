@@ -122,10 +122,17 @@ the following.
 The Serialize.field annotation also has optional arguments which allow the
 decoding or encoding of a field to be turned off. By default they are turned on.
 
-__IMPORTANT! If there is a Serialize annotation present on a member variable then all member variables to serialize require annotations. This is true even if the name within the map is the same as the variable name. This is an all or nothing operation.__
+__IMPORTANT! If there is a Serialize annotation present on a member variable
+then all member variables to serialize require annotations. This is true even
+if the name within the map is the same as the variable name. This is an all or
+nothing operation.__
 
 ### Custom ModelDecoder or ModelEncoder
-When decoding or encoding requires working on multiple values within the map data or the model a custom ModelDecoder or ModelEncoder should be created. A model can have as many decoders and encoders as necessary. Dogma Data will combine the converters into a CompositeModelDecoder which will invoke the individual conversion routines one by one.
+When decoding or encoding requires working on multiple values within the map
+data or the model a custom ModelDecoder or ModelEncoder should be created. A
+model can have as many decoders and encoders as necessary. Dogma Data will
+combine the converters into a CompositeModelDecoder which will invoke the
+individual conversion routines one by one.
 
 __IMPORTANT! This declaration needs to be present within the same library as the model in order for the linkage to be detected. Also the ordering within the CompositeModelDecoder is not guaranteed so do not rely on data from the respective converter to be present.__
 

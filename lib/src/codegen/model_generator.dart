@@ -31,7 +31,28 @@ const String _internalConstructorName = '_internal';
 const String _factoryVariableName = 'model';
 
 String generateModel(ModelMetadata metadata) {
-  return '';
+  var buffer = new StringBuffer();
+
+  // Get the names
+  var name = metadata.name;
+
+  // Write the class declaration
+  buffer.writeln('class $name {');
+
+  // Write the member variables
+  var explicit = metadata.explicitSerialization;
+
+  for (var field in metadata.fields) {
+    if (explicit) {
+      buffer.writeln('@Serialize.field(\'${field.serializationName}\')');
+    }
+
+    buffer.writeln('${field.type.name} ${field.name};');
+  }
+
+  buffer.writeln('}');
+
+  return buffer.toString();
 }
 
 /// Writes out the class definition for an unmodifiable view over the model using its [metadata].
