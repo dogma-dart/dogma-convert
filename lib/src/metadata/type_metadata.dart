@@ -88,4 +88,19 @@ class TypeMetadata extends Metadata {
 
     return value;
   }
+
+  //---------------------------------------------------------------------
+  // Operators
+  //---------------------------------------------------------------------
+
+  @override
+  bool operator== (Object compare) {
+    if (identical(this, compare)) {
+      return true;
+    } else if (compare is TypeMetadata) {
+      return name == compare.name;
+    } else {
+      return false;
+    }
+  }
 }
