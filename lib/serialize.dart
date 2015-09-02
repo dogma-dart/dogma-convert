@@ -33,12 +33,47 @@ class Serialize {
                              this.encode: false,
                              this.mapping});
 
+  /// Serializes a field with the [name].
+  ///
+  /// The [name] refers to the string value that is present in the map. This
+  /// may or may not match the name of the field itself.
+  ///
+  /// Setting [encode] to false means that the field should be ignored when
+  /// encoding. Setting [decode] to false means that the field should be
+  /// ignored when decoding.
   const Serialize.field(this.name, {this.encode: true, this.decode: true})
       : mapping = null;
 
-  const Serialize.through(this.name, {this.encode, this.decode})
+  /// Serializes a field with the [name] by using the [encode] and [decode]
+  /// functions.
+  const Serialize.function(this.name, {this.encode, this.decode})
       : mapping = null;
 
+  /// Serializes an enumeration using the [mapping].
+  ///
+  /// The mapping value should be of the form Map<T, Enum> where T is either
+  /// a String or an int, and Enum is the name of the enumeration. Each
+  /// enumeration value must be represented in the map and must contain a
+  /// single mapping.
+  ///
+  /// An example of serializing colors based on hex codes follows.
+  ///
+  ///     @Serialize.values(const {
+  ///       0xff0000: Color.red,
+  ///       0x00ff00: Color.green,
+  ///       0x0000ff: Color.blue
+  ///     })
+  ///     enum Color {
+  ///       red,
+  ///       green,
+  ///       blue
+  ///     }
+  ///
+  /// This is currently verbose due to the inability to add metadata to
+  /// individual enumeration values.
+  ///
+  /// When this [issue](https://github.com/dart-lang/sdk/issues/23441) is
+  /// resolved this setup will be deprecated.
   const Serialize.values(this.mapping)
       : name = ''
       , decode = null
@@ -48,6 +83,9 @@ class Serialize {
   // Class variables
   //---------------------------------------------------------------------
 
-  static const Serialize decodeThrough = const Serialize._internal(decode: true);
-  static const Serialize encodeThrough = const Serialize._internal(encode: true);
+  /// Marks a function as being the default decoder/encoder for a type.
+  ///
+  /// Whether the function is used for encoding or decoding is determined by
+  /// the return type or the first parameter being a user defined type.
+  static const Serialize using = const Serialize._internal();
 }
