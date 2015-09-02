@@ -9,9 +9,7 @@ library dogma_data;
 // Exports
 //---------------------------------------------------------------------
 
-export 'src/data/composite_model_decoder.dart';
-export 'src/data/composite_model_encoder.dart';
-export 'src/data/model_decoder.dart';
-export 'src/data/model_decoders.dart';
-export 'src/data/model_encoder.dart';
-export 'src/data/model_encoders.dart';
+export 'src/composite_model_decoder.dart';
+export 'src/composite_model_encoder.dart';
+export 'src/model_decoder.dart';
+export 'src/model_encoder.dart';

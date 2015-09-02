@@ -4,7 +4,7 @@
 // the LICENSE file.
 
 /// Contains the [CompositeModelEncoder] class.
-library dogma_data.src.data.composite_model_encoder;
+library dogma_data.src.composite_model_encoder;
 
 //---------------------------------------------------------------------
 // Standard libraries
