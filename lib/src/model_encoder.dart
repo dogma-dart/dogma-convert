@@ -3,32 +3,22 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Implementation of the [dogma.data] services using mirrors.
-library dogma_data.mirrors;
+/// Contains the [ModelEncoder] interface.
+library dogma_data.src.model_encoder;
 
 //---------------------------------------------------------------------
 // Standard libraries
 //---------------------------------------------------------------------
 
 import 'dart:convert';
-import 'dart:mirrors';
-
-//---------------------------------------------------------------------
-// Imports
-//---------------------------------------------------------------------
-
-import 'package:dogma_data/common.dart';
-
-import 'src/mirrors/mirrors_model_decoders.dart';
-import 'src/mirrors/mirrors_model_encoders.dart';
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
-void useMirrors() {
-  configure(
-      MirrorsModelDecoders.createDecoder,
-      MirrorsModelEncoders.createEncoder
-  );
-}
+/// Interface for encoding a [Model] from a [Map].
+///
+/// The [ModelEncoder] takes a [Model] as input and converts it from a Plain
+/// Old Dart Object (PODO) to a [Map]. Its behavior is defined by an explicit
+/// or implicit serialization on the [Model].
+abstract class ModelEncoder<Model> implements Converter<Model, Map> {}

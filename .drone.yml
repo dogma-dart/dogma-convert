@@ -1,0 +1,4 @@
+build:
+  image: google/dart
+  commands:
+    - sh build.sh
