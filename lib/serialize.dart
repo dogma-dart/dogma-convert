@@ -22,6 +22,13 @@ class Serialize {
   final dynamic decode;
   final dynamic encode;
   final Map mapping;
+  /// Whether the field encoding/decoding is optional.
+  ///
+  /// If the value is optional then code generated should check for these cases
+  /// and assign a value.
+  final bool optional;
+  /// The value that should be defaulted to when a field is optional.
+  final dynamic defaultsTo;
 
   //---------------------------------------------------------------------
   // Construction
@@ -31,7 +38,9 @@ class Serialize {
   const Serialize._internal({this.name: '',
                              this.decode: false,
                              this.encode: false,
-                             this.mapping});
+                             this.optional: true,
+                             this.mapping,
+                             this.defaultsTo});
 
   /// Serializes a field with the [name].
   ///
@@ -41,12 +50,20 @@ class Serialize {
   /// Setting [encode] to false means that the field should be ignored when
   /// encoding. Setting [decode] to false means that the field should be
   /// ignored when decoding.
-  const Serialize.field(this.name, {this.encode: true, this.decode: true})
+  const Serialize.field(this.name,
+                       {this.encode: true,
+                        this.decode: true,
+                        this.optional: false,
+                        this.defaultsTo})
       : mapping = null;
 
   /// Serializes a field with the [name] by using the [encode] and [decode]
   /// functions.
-  const Serialize.function(this.name, {this.encode, this.decode})
+  const Serialize.function(this.name,
+                          {this.encode,
+                           this.decode,
+                           this.optional: false,
+                           this.defaultsTo})
       : mapping = null;
 
   /// Serializes an enumeration using the [mapping].
@@ -77,7 +94,9 @@ class Serialize {
   const Serialize.values(this.mapping)
       : name = ''
       , decode = null
-      , encode = null;
+      , encode = null
+      , optional = false
+      , defaultsTo = null;
 
   //---------------------------------------------------------------------
   // Class variables
