@@ -1,4 +1,8 @@
-set -e
+#!/bin/sh
+set -ex
+
+# Get version
+dart --version
 
 # Install dependencies
 pub install
