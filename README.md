@@ -6,6 +6,10 @@
 [![Build Status](http://beta.drone.io/api/badges/dogma-dart/dogma-convert/status.svg)](http://beta.drone.io/dogma-dart/dogma-convert)
 [![Coverage Status](https://coveralls.io/repos/dogma-dart/dogma-convert/badge.svg?branch=master)](https://coveralls.io/r/dogma-dart/dogma-convert?branch=master)
 
+## Serialize
+
+Dogma Convert provides annotations for specifying serialization behavior. For more information view the [Dogma Codegen](https://github.com/dogma-dart/dogma-codegen) package.
+
 ## Features and bugs
 Please file feature requests and bugs at the [issue tracker][tracker].
 
