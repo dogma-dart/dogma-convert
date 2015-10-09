@@ -1,4 +1,4 @@
-name: dogma_data
+name: dogma_convert
 version: 0.0.1
 description: Data serialization for Dart.
 environment:

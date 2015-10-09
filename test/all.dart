@@ -3,22 +3,23 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains the [ModelEncoder] interface.
-library dogma_convert.src.model_encoder;
+// \TODO Remove this file after https://github.com/dart-lang/test/issues/36 is resolved.
+
+/// Runs all the tests to handle code coverage generation.
+library dogma_convert.test.all;
 
 //---------------------------------------------------------------------
-// Standard libraries
+// Imports
 //---------------------------------------------------------------------
 
-import 'dart:convert';
+import 'package:test/test.dart';
+
+import 'serialize_test.dart' as serialize_test;
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
-/// Interface for encoding a [Model] from a [Map].
-///
-/// The [ModelEncoder] takes a [Model] as input and converts it from a Plain
-/// Old Dart Object (PODO) to a [Map]. Its behavior is defined by an explicit
-/// or implicit serialization on the [Model].
-abstract class ModelEncoder<Model> implements Converter<Model, Map> {}
+void main() {
+  group('Serialize tests', serialize_test.main);
+}

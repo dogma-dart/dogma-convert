@@ -4,9 +4,7 @@
 // the LICENSE file.
 
 /// Contains the [Serialize] annotation.
-library dogma_data.serialize;
-
-// \TODO Use union types
+library dogma_convert.serialize;
 
 //---------------------------------------------------------------------
 // Library contents
@@ -18,9 +16,17 @@ class Serialize {
   // Member variables
   //---------------------------------------------------------------------
 
+  /// The name of the field to convert.
   final String name;
-  final dynamic decode;
-  final dynamic encode;
+  /// Whether the field should be decoded.
+  final bool decode;
+  /// Whether the field should be encoded.
+  final bool encode;
+  /// The name of the function to use for decoding.
+  final String decodeUsing;
+  /// The name of the function to use for encoding.
+  final String encodeUsing;
+  /// The mapping of enumerations.
   final Map mapping;
   /// Whether the field encoding/decoding is optional.
   ///
@@ -35,9 +41,11 @@ class Serialize {
   //---------------------------------------------------------------------
 
   /// Creates an instance of the [Serialize] class.
-  const Serialize._internal({this.name: '',
+  const Serialize._internal({this.name,
                              this.decode: false,
                              this.encode: false,
+                             this.decodeUsing,
+                             this.encodeUsing,
                              this.optional: true,
                              this.mapping,
                              this.defaultsTo});
@@ -55,16 +63,44 @@ class Serialize {
                         this.decode: true,
                         this.optional: false,
                         this.defaultsTo})
-      : mapping = null;
+      : decodeUsing = null
+      , encodeUsing = null
+      , mapping = null;
+
+  /// Encodes a field with the [name].
+  ///
+  /// The [name] refers to the string value that is present in the map. This
+  /// may or may not match the name of the field itself.
+  const Serialize.encodeField(this.name, {this.optional: false, this.defaultsTo})
+      : decode = false
+      , encode = true
+      , decodeUsing = null
+      , encodeUsing = null
+      , mapping = null;
+
+  /// Decodes a field with the [name].
+  ///
+  /// The [name] refers to the string value that is present in the map. This
+  /// may or may not match the name of the field itself.
+  const Serialize.decodeField(this.name, {this.optional: false, this.defaultsTo})
+      : decode = true
+      , encode = false
+      , decodeUsing = null
+      , encodeUsing = null
+      , mapping = null;
 
   /// Serializes a field with the [name] by using the [encode] and [decode]
   /// functions.
   const Serialize.function(this.name,
-                          {this.encode,
-                           this.decode,
+                          {String decode,
+                           String encode,
                            this.optional: false,
                            this.defaultsTo})
-      : mapping = null;
+      : decode = decode != null && encode != ''
+      , encode = encode != null && decode != ''
+      , decodeUsing = decode != '' ? decode : null
+      , encodeUsing = encode != '' ? encode : null
+      , mapping = null;
 
   /// Serializes an enumeration using the [mapping].
   ///
@@ -92,9 +128,11 @@ class Serialize {
   /// When this [issue](https://github.com/dart-lang/sdk/issues/23441) is
   /// resolved this setup will be deprecated.
   const Serialize.values(this.mapping)
-      : name = ''
-      , decode = null
-      , encode = null
+      : name = null
+      , decode = true
+      , encode = true
+      , decodeUsing = null
+      , encodeUsing = null
       , optional = false
       , defaultsTo = null;
 

@@ -3,13 +3,11 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-library dogma_data;
+library dogma_convert.convert;
 
 //---------------------------------------------------------------------
 // Exports
 //---------------------------------------------------------------------
 
-export 'src/composite_model_decoder.dart';
-export 'src/composite_model_encoder.dart';
 export 'src/model_decoder.dart';
 export 'src/model_encoder.dart';

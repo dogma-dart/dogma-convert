@@ -6,4 +6,4 @@ build:
 matrix:
   DART_VERSION:
     - latest
-    - "1.13.0-dev.1.0"
+    - "1.13.0-dev.6.0"
