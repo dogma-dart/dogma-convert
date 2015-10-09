@@ -10,3 +10,6 @@ pub install
 # Lint the code
 pub global activate linter
 pub global run linter .
+
+# Run the tests
+dart --checked test/all.dart
