@@ -23,7 +23,6 @@ const String _encodeFunction = 'encodeFoo';
 /// Test entry point.
 void main() {
   test('field', () {
-    var fieldName = 'foo';
     var serialize = new Serialize.field(_fieldName);
 
     expect(serialize.name, _fieldName);
