@@ -9,5 +9,4 @@ matrix:
     - "1.14.0-dev.7.0"
 publish:
   coverage:
-    when:
-      branch: master
+    token: $$COVERAGE_TOKEN
