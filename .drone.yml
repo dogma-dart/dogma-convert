@@ -6,4 +6,8 @@ build:
 matrix:
   DART_VERSION:
     - latest
-    - "1.13.0-dev.6.0"
+    - "1.14.0-dev.7.0"
+publish:
+  coverage:
+    when:
+      branch: master
