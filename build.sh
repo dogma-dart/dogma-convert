@@ -10,16 +10,20 @@ pub global activate linter
 pub install
 
 # Run the tests
-dart --checked --observe=8000 test/all.dart & \
+OBSERVATORY_PORT=8000
+COVERAGE_OUTPUT=coverage.json
+
+dart --checked --observe=${OBSERVATORY_PORT} test/all.dart & \
 pub global run coverage:collect_coverage \
-    --port=8000 \
-    --out coverage.json \
+    --port=${OBSERVATORY_PORT} \
+    --out ${COVERAGE_OUTPUT} \
+    --wait-paused \
     --resume-isolates & \
 wait
 
 pub global run coverage:format_coverage \
     --package-root=packages \
     --report-on lib \
-    --in coverage.json \
+    --in ${COVERAGE_OUTPUT} \
     --out lcov.info \
     --lcov
