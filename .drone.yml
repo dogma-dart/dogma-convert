@@ -8,7 +8,6 @@ build:
 matrix:
   DART_VERSION:
     - latest
-    - "1.14.0-dev.7.0"
 publish:
   coverage:
     token: $$COVERAGE_TOKEN
