@@ -12,7 +12,8 @@
 
 ## Serialize
 
-Dogma Convert provides annotations for specifying serialization behavior. For more information view the [Dogma Codegen](https://github.com/dogma-dart/dogma-codegen) package.
+Dogma Convert provides annotations for specifying serialization behavior. For more information view the 
+[Dogma Codegen](https://github.com/dogma-dart/dogma-codegen) package.
 
 ## Features and bugs
 Please file feature requests and bugs at the [issue tracker][tracker].
