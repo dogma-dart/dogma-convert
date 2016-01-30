@@ -5,11 +5,15 @@ set -ex
 dart --version
 
 # Get dependencies
-pub global activate coverage
-pub global activate linter
 pub install
 
+# Verify that the libraries are error and warning-free.
+dartanalyzer ${DARTANALYZER_FLAGS} \
+    lib/convert.dart \
+    lib/serialize.dart
+
 # Run the tests
+pub global activate coverage
 OBSERVATORY_PORT=8000
 COVERAGE_OUTPUT=coverage.json
 
