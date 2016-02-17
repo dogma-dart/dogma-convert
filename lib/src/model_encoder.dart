@@ -3,9 +3,6 @@
 // Use of this source code is governed by a zlib license that can be found in
 // the LICENSE file.
 
-/// Contains the [ModelEncoder] interface.
-library dogma_convert.src.model_encoder;
-
 //---------------------------------------------------------------------
 // Standard libraries
 //---------------------------------------------------------------------
