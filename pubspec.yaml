@@ -1,10 +1,9 @@
 name: dogma_convert
-version: 0.0.1
+version: 0.1.0
 description: Data serialization for Dart.
+author: Don Olmstead <don.j.olmstead@gmail.com>
+homepage: http://dogma-dart.github.io/
 environment:
   sdk: '>=1.12.0 <2.0.0'
 dev_dependencies:
-  coverage: ^0.7.1
-  test: ^0.12.3+9
-author: Don Olmstead <don.j.olmstead@gmail.com>
-homepage: http://dogma-dart.github.io/
+  test: ^0.12.13
