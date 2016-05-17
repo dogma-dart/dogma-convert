@@ -11,14 +11,12 @@
 
 import 'package:test/test.dart';
 
-import 'convert.dart' as convert;
-import 'serialize_test.dart' as serialize_test;
+import 'src/model_codec_test.dart' as model_codec_test;
 
 //---------------------------------------------------------------------
 // Library contents
 //---------------------------------------------------------------------
 
 void main() {
-  group('Convert tests', convert.main);
-  group('Serialize tests', serialize_test.main);
+  group('ModelCodec tests', model_codec_test.main);
 }
