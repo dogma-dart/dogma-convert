@@ -16,19 +16,12 @@ git clone -b migration https://github.com/dart-lang/coverage.git ../coverage
 # Run the tests
 pub global activate --source path ../coverage
 OBSERVATORY_PORT=8000
-COVERAGE_OUTPUT=coverage.json
+COVERAGE_OUTPUT=lcov.info
 
 dart --checked --observe=${OBSERVATORY_PORT} test/all.dart & \
-pub global run coverage:collect_coverage \
     --port=${OBSERVATORY_PORT} \
     --out ${COVERAGE_OUTPUT} \
+    --pause-timeout=120 \
     --wait-paused \
     --resume-isolates & \
 wait
-
-pub global run coverage:format_coverage \
-    --package-root=packages \
-    --report-on lib \
-    --in ${COVERAGE_OUTPUT} \
-    --out lcov.info \
-    --lcov
