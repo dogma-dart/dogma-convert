@@ -9,7 +9,7 @@ pipeline:
   coverage:
     when:
       matrix:
-        DART_VERSION: latest
+        DART_VERSION: dev
 
 matrix:
   DART_VERSION:
