@@ -25,4 +25,4 @@ pub global run coverage:coverage collect \
     --pause-timeout=120 \
     --wait-paused \
     --resume-isolates & \
-wait
+wait %1 %2
