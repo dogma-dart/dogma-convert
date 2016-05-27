@@ -21,7 +21,7 @@ COVERAGE_OUTPUT=lcov.info
 dart --checked --observe=${OBSERVATORY_PORT} test/all.dart & \
 pub global run coverage:coverage collect \
     --port=${OBSERVATORY_PORT} \
-    --out ${COVERAGE_OUTPUT} \
+    --output=${COVERAGE_OUTPUT} \
     --pause-timeout=120 \
     --wait-paused \
     --resume-isolates & \
