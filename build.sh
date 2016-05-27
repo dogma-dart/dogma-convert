@@ -26,3 +26,5 @@ pub global run coverage:coverage collect \
     --resume-isolates & \
 dart --checked --observe=${OBSERVATORY_PORT} test/all.dart & \
 wait %1 %2
+
+ls
