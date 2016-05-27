@@ -43,7 +43,7 @@ class ModelCodec<Model> extends Codec<Model, Map> {
   /// Decodes the given [input] into a [Model].
   ///
   /// If the [model] field is not specified a new [Model] will be instantiated
-  /// through the [create] method and that will be returned.
+  /// through the create method and that will be returned.
   ///
   /// **Warning!** When reusing a model it is not currently reset to an initial
   /// state. If one of the fields is not specified or if there are fields not

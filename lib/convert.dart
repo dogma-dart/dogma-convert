@@ -5,7 +5,7 @@
 
 /// Contains the [ModelDecoder] and [ModelEncoder] interfaces.
 ///
-/// Both interfaces are based on [Converter] from the `dart:convert` library.
+/// Both interfaces are based on Converter from the `dart:convert` library.
 /// This is done to have a common interface with the standard libraries. For
 /// the decoder the input is a [Map], while for the encoder the output is a
 /// [Map]. The [ModelEncoder] implementation matches the implementation
