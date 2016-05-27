@@ -18,7 +18,7 @@ pub global activate --source path ../coverage
 OBSERVATORY_PORT=8000
 COVERAGE_OUTPUT=lcov.info
 
-dart --checked --observe=${OBSERVATORY_PORT} test/all.dart &
+dart --checked --observe=${OBSERVATORY_PORT} test/all.dart
 
 pub global run coverage:coverage collect \
     --port=${OBSERVATORY_PORT} \
